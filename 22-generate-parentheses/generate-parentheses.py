@@ -1,16 +1,23 @@
 class Solution:
+    def is_valid(self, substr):
+        stack = []
+        for char in substr:
+            if char == '(':
+                stack.append(char)
+            else:
+                if not stack: return False
+                stack.pop()
+        return len(stack) == 0
+
     def generateParenthesis(self, n: int) -> List[str]:
-        ans, temp = [], []
-        def dfs(op, cl):
-            if cl < op or op < 0 or cl < 0: return
-            if op == cl == 0:
-                ans.append(''.join(temp))
-                return
-            temp.append('(')
-            dfs(op - 1, cl)
-            temp.pop()
-            temp.append(')')
-            dfs(op, cl - 1)
-            temp.pop()
-        dfs(n, n)
+        ans = []
+        q = collections.deque([''])
+        while q:
+            first = q.popleft()
+            if len(first) == n * 2:
+                if self.is_valid(first):
+                    ans.append(first)
+                continue
+            q.append(first + '(')
+            q.append(first + ')')
         return ans
