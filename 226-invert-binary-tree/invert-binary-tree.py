@@ -7,14 +7,24 @@
 class Solution:
     def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
         if not root: return root
-        root.left, root.right = root.right, root.left
-        self.invertTree(root.left)
-        self.invertTree(root.right)
+        q = collections.deque([root])
+        while q:
+            for _ in range(len(q)):
+                node = q.pop()
+                node.left, node.right = node.right, node.left
+                if node.left:
+                    q.append(node.left)
+                if node.right:
+                    q.append(node.right)
         return root
 """
-preorder dfs
-swap left and right node
-recursively call node.left
-recursively call node.right
-return node
+q = []
+while q:
+    iterate through q:
+        swap left and right
+        if left:
+            append left to q
+        if right:
+            append right to q
+return root
 """
