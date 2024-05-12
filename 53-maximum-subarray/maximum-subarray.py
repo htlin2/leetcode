@@ -1,25 +1,19 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        max_sum, curr_sum = float('-inf'), float('-inf')
-        # iterate through nums:
-        for n in nums:
-            # keep track of curr_sum = max(nums[i], curr_sum + nums[i])
-            curr_sum = max(n, curr_sum + n)
-            # keep track of max_sum
-            max_sum = max(max_sum, curr_sum)
-        return max_sum
-"""
-1. brute force
-two for loops to find largest sum
-Time: O(n^2)
-Space: O(1)
-
-2. greedy
-nums = [-2, 1,-3,4,-1,2,1,-5,4]
-curr_s  -2, 1,-2,4
-max_sum -2, 1, 1,4
-curr_sum = max(nums[i], curr_sum + nums[i])
-Time: O(n)
-Space: O(1)
-
-"""
+        def helper(l, r):
+            if l > r: return float('-inf')
+            left_sum = right_sum = total_sum = 0
+            mid = (l + r) // 2
+            curr_sum = 0
+            for i in range(mid - 1, l - 1, -1):
+                curr_sum += nums[i]
+                left_sum = max(left_sum, curr_sum)
+            curr_sum = 0
+            for i in range(mid + 1, r + 1):
+                curr_sum += nums[i]
+                right_sum = max(right_sum, curr_sum)
+            combined_sum = left_sum + nums[mid] + right_sum
+            left_max = helper(l, mid - 1)
+            right_max = helper(mid + 1, r)
+            return max(left_max, right_max, combined_sum)
+        return helper(0, len(nums) - 1)
