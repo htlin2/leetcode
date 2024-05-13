@@ -7,10 +7,12 @@ class Solution:
             if i_start <= s <= i_end or s <= i_start <= e:
                 newInterval = [min(i_start, s), max(i_end, e)]
             elif e < i_start:
-                return ans + [newInterval] + intervals[i:]
+                ans.append(newInterval)
+                return ans + intervals[i:]
             else:
                 ans.append(intervals[i])
-        return ans + [newInterval]
+        ans.append(newInterval)
+        return ans
 
 """
 1. sort + merge
