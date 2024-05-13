@@ -1,17 +1,17 @@
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        intervals.append(newInterval)
-        intervals.sort()
-        stack = [intervals[0]]
-        for i in range(1, len(intervals)):
-            i_s, i_e = intervals[i]
-            s_s, s_e = stack[-1]
-            if i_s <= s_s <= i_e or s_s <= i_s <= s_e:
-                stack.pop()
-                stack.append([min(s_s, i_s), max(s_e, i_e)])
+        ans = []
+        for i in range(len(intervals)):
+            i_start, i_end = intervals[i]
+            s, e = newInterval
+            if i_start <= s <= i_end or s <= i_start <= e:
+                newInterval = [min(i_start, s), max(i_end, e)]
+            elif e < i_start:
+                return ans + [newInterval] + intervals[i:]
             else:
-                stack.append([i_s, i_e])
-        return stack
+                ans.append(intervals[i])
+        return ans + [newInterval]
+
 """
 1. sort + merge
 add new interval to intervals
