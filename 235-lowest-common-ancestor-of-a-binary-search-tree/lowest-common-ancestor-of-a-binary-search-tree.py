@@ -10,11 +10,10 @@ class Solution:
         # swap p <> q, so p is always smaller than q
         if p.val >= q.val:
             return self.lowestCommonAncestor(root, q, p)
-        # preorder dfs
-        # base case:
-        if not root: return root
-        if p.val <= root.val <= q.val: return root
-        if q.val < root.val:
-            return self.lowestCommonAncestor(root.left, p, q)
-        else:
-            return self.lowestCommonAncestor(root.right, p, q)
+        while root:
+            if p.val <= root.val <= q.val: return root
+            if q.val < root.val:
+                root = root.left
+            else:
+                root = root.right
+        return root
