@@ -1,23 +1,29 @@
 class Solution:
     def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
-        DIR = [[0, 1], [0, -1], [-1, 0], [1, 0]]
         ROWS, COLS = len(mat), len(mat[0])
-        q = collections.deque([])
+        dp = []
+        for row in mat:
+            dp.append(row[:])
         for r in range(ROWS):
             for c in range(COLS):
-                if mat[r][c] == 0:
-                    q.append([r, c])
-                else:
-                    mat[r][c] = '#'
-        while q:
-            r, c = q.popleft()
-            for dr, dc in DIR:
-                rr, cc = r + dr, c + dc
-                if rr < 0 or cc < 0 or rr >= ROWS or cc >= COLS: continue
-                if mat[rr][cc] != '#': continue
-                mat[rr][cc] = mat[r][c] + 1
-                q.append([rr, cc])
-        return mat
+                min_dist = float('inf')
+                if dp[r][c] == 0: continue
+                if r - 1 >= 0:
+                    min_dist = min(min_dist, dp[r - 1][c])
+                if c - 1 >= 0:
+                    min_dist = min(min_dist, dp[r][c - 1])
+                dp[r][c] = min_dist + 1
+        for r in range(ROWS - 1, -1, -1):
+            for c in range(COLS - 1, -1, -1):
+                min_dist = float('inf')
+                if dp[r][c] == 0: continue
+                if r + 1 < ROWS:
+                    min_dist = min(min_dist, dp[r + 1][c])
+                if c + 1 < COLS:
+                    min_dist = min(min_dist, dp[r][c + 1])
+                dp[r][c] = min(min_dist + 1, dp[r][c])
+        return dp
+
 """
 1. BFS
 
