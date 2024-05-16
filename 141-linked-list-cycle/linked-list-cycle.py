@@ -7,12 +7,12 @@
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         if not head: return False
-        slow, fast = head, head.next
-        while fast and fast.next:
-            if slow == fast: return True
-            slow = slow.next
-            fast = fast.next
-            fast = fast.next
+        hashmap = {}
+        node = head
+        while node:
+            if node in hashmap: return True
+            hashmap[node] = node
+            node = node.next
         return False
 
 """
