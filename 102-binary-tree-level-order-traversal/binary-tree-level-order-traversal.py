@@ -7,33 +7,14 @@
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root: return []
+        hashmap = collections.defaultdict(list)
+        def dfs(node, level):
+            if not node: return
+            hashmap[level].append(node.val)
+            dfs(node.left, level + 1)
+            dfs(node.right, level + 1)
+        dfs(root, 0)
         ans = []
-        q = collections.deque([root])
-        while q:
-            level = []
-            for _ in range(len(q)):
-                node = q.popleft()
-                level.append(node.val)
-                if node.left:
-                    q.append(node.left)
-                if node.right:
-                    q.append(node.right)
-            ans.append(level)
+        for i in range(len(hashmap)):
+            ans.append(hashmap[i])
         return ans
-
-"""
-BFS
-ans = []
-q = []
-while q:
-    level = []
-    for _ in range(len(q)):
-        node = q.popleft()
-        level.append(node.val)
-        if node.left:
-            q.append(node.left)
-        if node.right:
-            q.append(node.right)
-    ans.append(level)
-return ans
-"""
