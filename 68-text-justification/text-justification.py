@@ -2,26 +2,28 @@ class Solution:
     def fullJustify(self, words: List[str], maxWidth: int) -> List[str]:
         res = []
         line, length = [], 0
-        for i in range(len(words)):
-            # logic to append line to res
-            if length + len(line) + len(words[i]) > maxWidth:
+        for w in words:
+            # check line length
+            if length + len(line) + len(w) > maxWidth:
                 extra_spaces = maxWidth - length
                 spaces = extra_spaces // max(1, len(line) - 1)
-                remainder = extra_spaces % max(1, len(line) - 1)
-
-                for j in range(max(1, len(line) - 1)):
-                    line[j] += ' ' * spaces
-                    if remainder:
-                        line[j] += ' '
-                        remainder -= 1
+                remain = extra_spaces % max(1, len(line) - 1)
+                # add space to line
+                for i in range(max(1, len(line) - 1)):
+                    line[i] += ' ' * spaces
+                    if remain:
+                        line[i] += ' '
+                        remain -= 1
+                # append line to res and reset line and length
                 res.append(''.join(line))
                 line, length = [], 0
 
-            line.append(words[i])
-            length += len(words[i])
+            line.append(w)
+            length += len(w)
 
-        # last_line logic
+        # logic about last_line
         last_line = ' '.join(line)
+        # add trailing spaces
         last_line += ' ' * (maxWidth - len(last_line))
         res.append(last_line)
         return res
