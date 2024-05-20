@@ -14,22 +14,15 @@ class Solution:
         q = collections.deque([node])
         while q:
             first = q.popleft()
-            if first in visited: continue
+            if first.val in visited: continue
             visited.add(first.val)
-            cloned_node = Node(first.val)
             if first not in hashmap:
-                hashmap[first] = cloned_node
-            else:
-                cloned_node = hashmap[first]
-            # iterate through first's neighbors
+                hashmap[first] = Node(first.val)
             for nei in first.neighbors:
-                cloned_nei_node = Node(nei.val)
                 if nei not in hashmap:
-                    hashmap[nei] = cloned_nei_node
-                else:
-                    cloned_nei_node = hashmap[nei]
-                if cloned_nei_node not in cloned_node.neighbors:
-                    cloned_node.neighbors.append(cloned_nei_node)
+                    hashmap[nei] = Node(nei.val)
+                cloned_nei_node = hashmap[nei]
+                hashmap[first].neighbors.append(cloned_nei_node)
                 if nei.val in visited: continue
                 q.append(nei)
         return hashmap[node]
