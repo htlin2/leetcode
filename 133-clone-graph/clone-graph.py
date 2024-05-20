@@ -14,8 +14,8 @@ class Solution:
         q = collections.deque([node])
         while q:
             first = q.popleft()
-            if first.val in visited: continue
-            visited.add(first.val)
+            if first in visited: continue
+            visited.add(first)
             if first not in hashmap:
                 hashmap[first] = Node(first.val)
             for nei in first.neighbors:
@@ -23,7 +23,7 @@ class Solution:
                     hashmap[nei] = Node(nei.val)
                 cloned_nei_node = hashmap[nei]
                 hashmap[first].neighbors.append(cloned_nei_node)
-                if nei.val in visited: continue
+                if nei in visited: continue
                 q.append(nei)
         return hashmap[node]
 """
