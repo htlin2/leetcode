@@ -1,29 +1,20 @@
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
-        stack = []
         operator = set(['+', '-', '*', '/'])
-        # iterate through tokens:
-        for t in tokens:
-            if t not in operator:
-                # append digit to stack
-                stack.append(int(t))
-                continue
-            second = stack.pop()
-            first = stack.pop()
-            # handle each operator
-            if t == '+':
-                stack.append(first + second)
-            elif t == '-':
-                stack.append(first - second)
-            elif t == '*':
-                stack.append(first * second)
-            else:
-                stack.append(int(first / second))
-        return stack[0]
-
-"""
-tokens = ["4","13","5","/","+"]
-stack = []
-Time: O(n)
-Space: O(n)
-"""
+        i = 0
+        while i < len(tokens):
+            if tokens[i] in operator:
+                num1 = int(tokens[i - 2])
+                num2 = int(tokens[i - 1])
+                if tokens[i] == '+':
+                    total = num1 + num2
+                elif tokens[i] == '-':
+                    total = num1 - num2
+                elif tokens[i] == '*':
+                    total = num1 * num2
+                else:
+                    total = int(num1 / num2)
+                tokens = tokens[:i-2] + [total] + tokens[i+1:]
+                i -= 2
+            i += 1
+        return int(tokens[0])
