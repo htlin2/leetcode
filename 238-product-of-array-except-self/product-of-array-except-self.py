@@ -1,20 +1,16 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         N = len(nums)
-        prefix_sums = []
+        prefix_sums = [1] * N
         prefix = 1
         for i in range(N):
-            prefix_sums.append(prefix)
+            prefix_sums[i] = prefix
             prefix *= nums[i]
-        postfix_sums = [0] * N
         postfix = 1
         for i in range(N - 1, -1, -1):
-            postfix_sums[i] = postfix
+            prefix_sums[i] *= postfix
             postfix *= nums[i]
-        ans = [0] * N
-        for i in range(N):
-            ans[i] = prefix_sums[i] * postfix_sums[i]
-        return ans
+        return prefix_sums
         
 
 """
