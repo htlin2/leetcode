@@ -1,31 +1,32 @@
 class Solution:
-    def updateMatrix(self, mat: List[List[int]]) -> List[List[int]]:
-        ROWS, COLS = len(mat), len(mat[0])
-        dp = []
-        for row in mat:
-            dp.append(row[:])
+    def updateMatrix(self, grid: List[List[int]]) -> List[List[int]]:
+        ROWS, COLS = len(grid), len(grid[0])
         for r in range(ROWS):
             for c in range(COLS):
-                min_dist = float('inf')
-                if dp[r][c] == 0: continue
-                if r - 1 >= 0:
-                    min_dist = min(min_dist, dp[r - 1][c])
-                if c - 1 >= 0:
-                    min_dist = min(min_dist, dp[r][c - 1])
-                dp[r][c] = min_dist + 1
+                if grid[r][c] == 0: continue
+                up = grid[r - 1][c] if r - 1 >= 0 else float('inf')
+                left = grid[r][c - 1] if c - 1 >= 0 else float('inf')
+                grid[r][c] = min(up, left) + 1
         for r in range(ROWS - 1, -1, -1):
             for c in range(COLS - 1, -1, -1):
-                min_dist = float('inf')
-                if dp[r][c] == 0: continue
-                if r + 1 < ROWS:
-                    min_dist = min(min_dist, dp[r + 1][c])
-                if c + 1 < COLS:
-                    min_dist = min(min_dist, dp[r][c + 1])
-                dp[r][c] = min(min_dist + 1, dp[r][c])
-        return dp
+                if grid[r][c] == 0: continue
+                down = grid[r + 1][c] if r + 1 < ROWS else float('inf')
+                right = grid[r][c + 1] if c + 1 < COLS else float('inf')
+                grid[r][c] = min(grid[r][c], min(down, right) + 1)
+        return grid
 
 """
-1. BFS
+Input: mat = [
+    [0,1,0],
+    [1,1,1],
+    [1,1,1]
+]
+mat = [
+    [0,0,0],
+    [0,1,0],
+    [#,2,1]
+]
 
-2. dp
+Output: [[0,0,0],[0,1,0],[1,2,1]]
+
 """
