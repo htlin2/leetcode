@@ -10,14 +10,26 @@ from typing import Optional
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if not node: return node
-        hashmap = {}
-        hashmap[node] = Node(node.val)
-        q = collections.deque([node])
-        while q:
-            first = q.popleft()
-            for nei in first.neighbors:
-                if nei not in hashmap:
-                    hashmap[nei] = Node(nei.val)
-                    q.append(nei)
-                hashmap[first].neighbors.append(hashmap[nei])
-        return hashmap[node]
+        visited, node_cloned = set(), {}
+        def dfs(node):
+            # base case: if node in visited: return
+            if node in node_cloned: return node_cloned[node]
+            visited.add(node)
+            node_cloned[node] = Node(node.val)
+            # iterate through neighbors of original node:
+            for nei in node.neighbors:
+                # recersively call dfs(nei)
+                # if nei in visited: continue
+                node_cloned[node].neighbors.append(dfs(nei))
+            visited.remove(node)
+            return node_cloned[node]
+        dfs(node)
+        return node_cloned[node]
+
+"""
+dfs + hashmap
+node_cloned = {
+    node: cloned_node
+}
+
+"""
