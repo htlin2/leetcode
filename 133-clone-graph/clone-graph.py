@@ -10,23 +10,12 @@ from typing import Optional
 class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if not node: return node
-        visited, node_cloned = set(), {}
+        hashmap = {} # node: cloned
         def dfs(node):
-            # base case: if node in visited: return
-            if node in node_cloned: return node_cloned[node]
-            node_cloned[node] = Node(node.val)
-            # iterate through neighbors of original node:
+            if node in hashmap: return hashmap[node]
+            hashmap[node] = Node(node.val)
             for nei in node.neighbors:
-                # recersively call dfs(nei)
-                node_cloned[node].neighbors.append(dfs(nei))
-            return node_cloned[node]
-        dfs(node)
-        return node_cloned[node]
-
-"""
-dfs + hashmap
-node_cloned = {
-    node: cloned_node
-}
-
-"""
+                cloned = dfs(nei)
+                hashmap[node].neighbors.append(cloned)
+            return hashmap[node]
+        return dfs(node)
