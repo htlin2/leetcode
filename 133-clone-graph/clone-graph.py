@@ -11,11 +11,13 @@ class Solution:
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if not node: return node
         hashmap = {} # node: cloned
-        def dfs(node):
-            if node in hashmap: return hashmap[node]
-            hashmap[node] = Node(node.val)
-            for nei in node.neighbors:
-                cloned = dfs(nei)
-                hashmap[node].neighbors.append(cloned)
-            return hashmap[node]
-        return dfs(node)
+        q = collections.deque([node])
+        hashmap[node] = Node(node.val)
+        while q:
+            first = q.popleft()
+            for nei in first.neighbors:
+                if nei not in hashmap:
+                    hashmap[nei] = Node(nei.val)
+                    q.append(nei)
+                hashmap[first].neighbors.append(hashmap[nei])
+        return hashmap[node]
