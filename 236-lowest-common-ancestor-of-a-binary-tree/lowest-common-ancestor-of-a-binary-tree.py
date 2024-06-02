@@ -7,18 +7,22 @@
 
 class Solution:
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        def dfs(node):
-            if not node: return node
-            left = dfs(node.left)
-            right = dfs(node.right)
-            if node.val == p.val or node.val == q.val: return node
-            if left and right: return node
-            return left or right
-        return dfs(root)
+        if not root: return root
+        parents = {root: None}
+        queue = collections.deque([root])
+        while p not in parents or q not in parents:
+            node = queue.popleft()
+            if node.left:
+                parents[node.left] = node
+                queue.append(node.left)
+            if node.right:
+                parents[node.right] = node
+                queue.append(node.right)
+        ancestor = set()
+        while p:
+            ancestor.add(p)
+            p = parents[p]
         
-"""
-DFS postorder
-
-
-
-"""
+        while q not in ancestor:
+            q = parents[q]
+        return q
