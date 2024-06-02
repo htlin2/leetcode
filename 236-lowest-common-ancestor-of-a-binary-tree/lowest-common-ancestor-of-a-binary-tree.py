@@ -13,9 +13,7 @@ class Solution:
             right = dfs(node.right)
             if node.val == p.val or node.val == q.val: return node
             if left and right: return node
-            if left: return left
-            if right: return right
-            return None
+            return left or right
         return dfs(root)
         
 """
