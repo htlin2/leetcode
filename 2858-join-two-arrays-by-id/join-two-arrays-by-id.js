@@ -5,19 +5,16 @@
  */
 var join = function(arr1, arr2) {
     const hashmap = {} // key: {x: , y: }
-    arr1.forEach(e => {
-        hashmap[e.id] = e
-    })
+    arr1.forEach(e => hashmap[e.id] = e)
     arr2.forEach(e => {
-        const id = e.id
-        if (!id in hashmap) {
-            hashmap[id] = e
+        if (e.id in hashmap) {
+            hashmap[e.id] = {
+                ...hashmap[e.id],
+                ...e
+            }
             return
         }
-        hashmap[id] = {
-            ...hashmap[id],
-            ...e
-        }
+        hashmap[e.id] = e
     })
     return Object.values(hashmap)
 };
