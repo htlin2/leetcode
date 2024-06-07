@@ -1,22 +1,22 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        ans = ''
-        if len(s) < len(t): return ans
+        if len(s) < len(t): return ''
         counter = collections.Counter(t)
         need, have = len(counter), 0
         window = collections.defaultdict(int)
+        res = ''
         l = 0
-        for r, c in enumerate(s):
-            if c not in counter: continue
-            window[c] += 1
-            if window[c] == counter[c]:
+        for r, char in enumerate(s):
+            if char not in counter: continue
+            window[char] += 1
+            if window[char] == counter[char]:
                 have += 1
             while need == have:
-                if not ans or len(ans) > r - l + 1:
-                    ans = s[l:r+1]
+                if not res or len(res) > r - l + 1:
+                    res = s[l:r + 1]
                 if s[l] in counter:
                     window[s[l]] -= 1
                     if window[s[l]] < counter[s[l]]:
-                        have -=1
+                        have -= 1
                 l += 1
-        return ans
+        return res
