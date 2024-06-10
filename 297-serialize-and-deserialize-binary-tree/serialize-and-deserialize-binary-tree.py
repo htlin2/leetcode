@@ -1,4 +1,3 @@
-from collections import deque
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
@@ -14,19 +13,19 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        ans = []
-        q = deque([root])
+        if not root: return ''
+        res = []
+        q = collections.deque([root])
         while q:
-            for i in range(len(q)):
-                node = q.popleft()
-                if not node:
-                    ans.append('N')
-                    continue
-                ans.append(str(node.val))
-                left, right = node.left, node.right
-                q.append(left)
-                q.append(right)
-        return ','.join(ans)
+            node = q.popleft()
+            if not node:
+                res.append('N')
+                continue
+            res.append(str(node.val))
+            q.append(node.left)
+            q.append(node.right)
+        return ','.join(res)
+        
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -34,25 +33,22 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        data = data.split(',')
+        if not data: return None
+        arr = data.split(',')
         i = 0
-        if data[i] == 'N': return None
-        ans = TreeNode(int(data[i]))
-        q = deque([ans])
+        root = TreeNode(int(arr[i]))
+        q = collections.deque([root])
         while q:
             node = q.popleft()
             if not node: continue
             i += 1
-            left = None if data[i] == 'N' else TreeNode(int(data[i]))
-            node.left = left
-            q.append(left)
+            node.left = TreeNode(int(arr[i])) if arr[i] != 'N' else None
+            q.append(node.left)
 
             i += 1
-            right = None if data[i] == 'N' else TreeNode(int(data[i]))
-            node.right = right
-            q.append(right)
-        return ans
-
+            node.right = TreeNode(int(arr[i])) if arr[i] != 'N' else None
+            q.append(node.right)
+        return root
         
 
 # Your Codec object will be instantiated and called as such:
