@@ -1,3 +1,4 @@
+from collections import deque
 # Definition for a binary tree node.
 # class TreeNode(object):
 #     def __init__(self, x):
@@ -13,19 +14,19 @@ class Codec:
         :type root: TreeNode
         :rtype: str
         """
-        if not root: return ''
-        res = []
-        q = collections.deque([root])
+        ans = []
+        q = deque([root])
         while q:
-            node = q.popleft()
-            if not node:
-                res.append('N')
-                continue
-            res.append(str(node.val))
-            q.append(node.left)
-            q.append(node.right)
-        return ','.join(res)
-        
+            for i in range(len(q)):
+                node = q.popleft()
+                if not node:
+                    ans.append('N')
+                    continue
+                ans.append(str(node.val))
+                left, right = node.left, node.right
+                q.append(left)
+                q.append(right)
+        return ','.join(ans)
 
     def deserialize(self, data):
         """Decodes your encoded data to tree.
@@ -33,22 +34,25 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        if not data: return None
-        arr = data.split(',')
+        data = data.split(',')
         i = 0
-        root = TreeNode(int(arr[i]))
-        q = collections.deque([root])
+        if data[i] == 'N': return None
+        ans = TreeNode(int(data[i]))
+        q = deque([ans])
         while q:
-            i += 1
             node = q.popleft()
-            node.left = TreeNode(int(arr[i])) if arr[i] != 'N' else None
-            if node.left:
-                q.append(node.left)
+            if not node: continue
             i += 1
-            node.right = TreeNode(int(arr[i])) if arr[i] != 'N' else None
-            if node.right:
-                q.append(node.right)
-        return root
+            left = None if data[i] == 'N' else TreeNode(int(data[i]))
+            node.left = left
+            q.append(left)
+
+            i += 1
+            right = None if data[i] == 'N' else TreeNode(int(data[i]))
+            node.right = right
+            q.append(right)
+        return ans
+
         
 
 # Your Codec object will be instantiated and called as such:
