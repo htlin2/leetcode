@@ -15,14 +15,15 @@ class Codec:
         """
         if not root: return ''
         res = []
-        def dfs(node):
+        q = collections.deque([root])
+        while q:
+            node = q.popleft()
             if not node:
                 res.append('N')
-                return
+                continue
             res.append(str(node.val))
-            dfs(node.left)
-            dfs(node.right)
-        dfs(root)
+            q.append(node.left)
+            q.append(node.right)
         return ','.join(res)
         
 
@@ -32,19 +33,22 @@ class Codec:
         :type data: str
         :rtype: TreeNode
         """
-        if not data: return []
+        if not data: return None
         arr = data.split(',')
-        i = -1
-        def dfs():
-            nonlocal i
+        i = 0
+        root = TreeNode(int(arr[i]))
+        q = collections.deque([root])
+        while q:
             i += 1
-            if arr[i] == 'N': return None
-            node = TreeNode(int(arr[i]))
-            node.left = dfs()
-            node.right = dfs()
-            return node
-        return dfs()
-
+            node = q.popleft()
+            node.left = TreeNode(int(arr[i])) if arr[i] != 'N' else None
+            if node.left:
+                q.append(node.left)
+            i += 1
+            node.right = TreeNode(int(arr[i])) if arr[i] != 'N' else None
+            if node.right:
+                q.append(node.right)
+        return root
         
 
 # Your Codec object will be instantiated and called as such:
