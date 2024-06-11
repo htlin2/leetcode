@@ -7,7 +7,6 @@ var areDeeplyEqual = function(o1, o2) {
     if (o1 === o2) return true
     if (o1 === null || o2 === null) return o1 === o2;
     if (typeof o1 !== typeof o2) return false;
-    // if (typeof o1 !== 'object' || typeof o2 !== 'object') return o1 === o2;
     // check array
     if (Array.isArray(o1) || Array.isArray(o2)) {
         if (!(Array.isArray(o1) && Array.isArray(o2))) return false
