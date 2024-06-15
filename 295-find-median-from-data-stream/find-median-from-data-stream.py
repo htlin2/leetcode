@@ -9,7 +9,8 @@ class MedianFinder:
             heapq.heappush(self.right, num)
         else:
             heapq.heappush(self.left, -num)
-        # balance
+        
+        # balance length
         if len(self.right) - len(self.left) > 1:
             n = heapq.heappop(self.right)
             heapq.heappush(self.left, -n)
@@ -25,8 +26,8 @@ class MedianFinder:
             return float(total / 2)
         # odd
         if len(self.right) - len(self.left) > 0:
-            return float(self.right[0])
-        return float(-self.left[0])
+            return self.right[0]
+        return -self.left[0]
 
 
 # Your MedianFinder object will be instantiated and called as such:
