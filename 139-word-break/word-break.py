@@ -1,17 +1,17 @@
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
-        N = len(s)
-        memo = {} # index: bool
-        def dfs(i):
-            if i == N: return True
-            if i in memo: return memo[i]
+        memo = {}
+        def dfs(s):
+            if not s: return True
+            if s in memo: return memo[s]
             res = False
             for w in wordDict:
-                if s[i:i+len(w)] != w: continue
-                res = (res or dfs(i + len(w)))
-            memo[i] = res
+                if not s.startswith(w): continue
+                substr = s[len(w):]
+                res = res or dfs(substr)
+            memo[s] = res
             return res
-        return dfs(0)
+        return dfs(s)
         
 """
 backtracking
