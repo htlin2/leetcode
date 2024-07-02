@@ -1,25 +1,24 @@
 class Solution:
     def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
         if endWord not in wordList: return 0
-        adj = collections.defaultdict(set)
+        adj = collections.defaultdict(set) # word: [word1, word2]
         for w in wordList:
             for i in range(len(w)):
-                star_word = list(w)
-                star_word[i] = '*'
-                adj[''.join(star_word)].add(w)
-        # print(adj)
+                key = list(w)
+                key[i] = '*'
+                adj[''.join(key)].add(w)
+
         visited = set()
         min_heap = [[0, beginWord]]
         while min_heap:
             count, w = heapq.heappop(min_heap)
-            if w in visited: continue
             visited.add(w)
             count += 1
             if w == endWord: return count
             for i in range(len(w)):
-                star_word = list(w)
-                star_word[i] = '*'
-                for nei in adj[''.join(star_word)]:
+                key = list(w)
+                key[i] = '*'
+                for nei in adj[''.join(key)]:
                     if nei in visited: continue
                     heapq.heappush(min_heap, [count, nei])
         return 0
