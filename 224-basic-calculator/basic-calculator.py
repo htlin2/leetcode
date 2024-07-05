@@ -9,7 +9,7 @@ class Solution:
                 cur = cur * 10 + int(char)
             elif char in ['+', '-']:
                 print(res, cur, sign)
-                res += cur * sign
+                res += sign * cur
                 sign = 1 if char == '+' else -1
                 cur = 0
             elif char == '(':
@@ -18,7 +18,7 @@ class Solution:
                 sign = 1
                 res = 0
             elif char == ')':
-                res += cur * sign
+                res += sign * cur
                 res *= stack.pop()
                 res += stack.pop()
                 sign = 1
