@@ -1,16 +1,20 @@
 class Solution:
     def minSubArrayLen(self, target: int, nums: List[int]) -> int:
-        # sliding window variable
+        # prefix sum + binary search
         N = len(nums)
         res = float('inf')
-        window_sum = 0
-        l = 0
-        for r in range(N):
-            window_sum += nums[r]
-            while l < N and window_sum >= target:
-                res = min(res, r - l + 1)
-                window_sum -= nums[l]
-                l += 1
+        prefix_sums = []
+        prefix = 0
+        for i, n in enumerate(nums):
+            prefix += n
+            if prefix >= target:
+                res = min(res, i + 1)
+            prefix_sums.append(prefix)
+        for l, n in enumerate(prefix_sums):
+            to_find = n + target
+            r = bisect.bisect_left(prefix_sums, to_find)
+            if r >= N: continue
+            res = min(res, r - l)
         return res if res != float('inf') else 0
 """
 1 brute force
@@ -29,6 +33,7 @@ space: O(1)
 target = 7, nums = 
          [2,3,1,2, 4, 3]
 prefix = [2,5,6,8,12,15]
+         [2,5,6,3, 4, 5]
 time: O(n * log n)
 space: O(n)
 """
