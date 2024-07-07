@@ -1,8 +1,9 @@
 class Solution:
     def containsDuplicate(self, nums: List[int]) -> bool:
-        counter = collections.Counter(nums)
-        for k, v in counter.items():
-            if v >= 2: return True
+        hashmap = set()
+        for n in nums:
+            if n in hashmap: return True
+            hashmap.add(n)
         return False
 
 """
