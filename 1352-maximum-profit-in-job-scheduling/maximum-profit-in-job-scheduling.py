@@ -1,3 +1,5 @@
+import bisect
+
 class Solution:
     def jobScheduling(self, startTime: List[int], endTime: List[int], profit: List[int]) -> int:
         intervals = sorted(zip(startTime, endTime, profit))
@@ -8,13 +10,9 @@ class Solution:
             if i in memo: return memo[i]
             # skip
             res = dfs(i + 1)
-            # not skip
+            # binary search
             idx = bisect.bisect_left(intervals, (intervals[i][1],))
             res = max(res, dfs(idx) + intervals[i][-1])
             memo[i] = res
             return res
         return dfs(0)
-
-"""
-backtracking + memo + Binary search
-"""
