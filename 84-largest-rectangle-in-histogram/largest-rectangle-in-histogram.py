@@ -4,19 +4,17 @@ class Solution:
         N = len(heights)
         res = 0
         stack = [] # (index, height)
-        # iterate throught heights
         for i, h in enumerate(heights):
-            # while stack and top of stack is heigher than current height:
-            L = i
+            start = i
             while stack and stack[-1][-1] >= h:
                 index, height = stack.pop()
-                area = height * (i - index)
+                base = i - index
+                area = base * height
                 res = max(res, area)
-                L = index
+                start = index
             res = max(res, h)
-            stack.append([L, h])
-        # iterate through stack and get height
-        for i, h in stack:
-            area = (N - i) * h
+            stack.append([start, h])
+        for index, height in stack:
+            area = (N - index) * height
             res = max(res, area)
         return res
