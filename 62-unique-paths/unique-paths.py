@@ -3,11 +3,12 @@ class Solution:
         # tabulation
         ROWS, COLS = m, n
         dp = collections.defaultdict(int)
-        dp[0, -1] = 1
-        for r in range(ROWS):
-            for c in range(COLS):
-                dp[r, c] = dp[r - 1, c] + dp[r, c - 1]
-        return dp[ROWS - 1, COLS - 1]
+        dp[ROWS - 1, COLS - 1] = 1
+        for r in range(ROWS - 1, -1, -1):
+            for c in range(COLS - 1, -1, -1):
+                if r == ROWS - 1 and c == COLS - 1: continue
+                dp[r, c] = dp[r + 1, c] + dp[r, c + 1]
+        return dp[0, 0]
 """
 backtracking + memo
 dfs(r, c):
