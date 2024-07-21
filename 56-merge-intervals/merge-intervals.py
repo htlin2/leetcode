@@ -1,12 +1,23 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        if not intervals: return intervals
         intervals.sort()
-        ans = [intervals[0]]
-        for i in range(1, len(intervals)):
+        N = len(intervals)
+        stack = [intervals[0]]
+        for i in range(1, N):
+            s, e = stack[-1]
             i_s, i_e = intervals[i]
-            a_s, a_e = ans[-1]
-            if a_s <= i_s <= a_e or i_s <= a_s <= i_e:
-                ans[-1] = [min(a_s, i_s), max(a_e, i_e)]
+            if s <= i_s <= e or i_s <= s <= i_e:
+                stack.pop()
+                merged = [min(s, i_s), max(e, i_e)]
+                stack.append(merged)
             else:
-                ans.append([i_s, i_e])
-        return ans
+                stack.append(intervals[i])
+        return stack
+"""
+stack
+sort intervals
+stack = [[2,6], [8, 10]]
+time: O(n log n)
+space: O(n)
+"""
