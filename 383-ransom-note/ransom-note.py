@@ -1,29 +1,23 @@
 class Solution:
     def canConstruct(self, ransomNote: str, magazine: str) -> bool:
-        if len(ransomNote) > len(magazine): return False
-        ransom_hashmap = collections.Counter(ransomNote)
-        for m in magazine:
-            if m in ransom_hashmap:
-                ransom_hashmap[m] -= 1
-                if ransom_hashmap[m] == 0:
-                    del ransom_hashmap[m]
-            if not ransom_hashmap: return True
-        return False
+        counter = collections.Counter(magazine)
+        for char in ransomNote:
+            if char not in counter or counter[char] <= 0:
+                return False
+            counter[char] -= 1
+        return True
 """
-1. hashmap
-ransomNote_hashmap
-iterate through magazine
-    decrement ransomNote_hashmap's value
-    if ransomNote_hashmap is empty: return True
-return False
-Time: O(n + m) or O(max(n, m))
-Space: O(n)
+1) hashmap = {} key: letter from magazine, value: count
+iterate through ransomNote
+    if char not in hashmap or hashmap's value is less than 0
+        return false
+    decrement hashmap's value
+Time: O(n)
+space: O(1) -> 26 alphabets
 
-2. brute force
+2) brute force
 iterate through ransomNote:
-    pop the charactor in magazine
-    if can't pop, return False
-return True
-Time: O(n * m^2)
-Space: O(1)
+    if char is in magazine, remove charactor in magazine
+Time: O(n * m)
+space: O(1)
 """
