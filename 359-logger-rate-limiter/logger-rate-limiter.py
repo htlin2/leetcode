@@ -4,11 +4,8 @@ class Logger:
         self.hashmap = {} # key: time
 
     def shouldPrintMessage(self, timestamp: int, message: str) -> bool:
-        if not message in self.hashmap:
-            self.hashmap[message] = timestamp + 10
-            return True
-        time_limit = self.hashmap[message]
-        if timestamp < time_limit: return False
+        if message in self.hashmap and timestamp < self.hashmap[message]:
+            return False
         self.hashmap[message] = timestamp + 10
         return True
 
