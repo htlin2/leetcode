@@ -8,8 +8,6 @@ class TimeMap:
 
     def get(self, key: str, timestamp: int) -> str:
         timestamp_values = self.cache[key]
-        if not timestamp_values:
-            return ''
         to_find = timestamp
         idx = bisect.bisect_left(timestamp_values, [to_find, ])
         if 0 <= idx < len(timestamp_values) and timestamp_values[idx][0] == timestamp:
