@@ -6,12 +6,13 @@
 var flat = function (arr, n) {
     if (!n) return arr
     const res = []
-    for (let i = 0; i < arr.length; i++) {
-        if (!Array.isArray(arr[i])) {
-            res.push(arr[i])
+    for (const item of arr) {
+        if (Array.isArray(item)) {
+            // TODO: flat
+            const flattened = flat(item, n - 1)
+            res.push(...flattened)
         } else {
-            const flatten = flat(arr[i], n - 1)
-            res.push(...flatten)
+            res.push(item)
         }
     }
     return res
