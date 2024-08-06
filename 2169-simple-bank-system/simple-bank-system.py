@@ -1,33 +1,33 @@
 class Bank:
 
     def __init__(self, balance: List[int]):
-        self.balance = {}
-        for i, b in enumerate(balance):
-            self.balance[i] = b
+        self.balance = balance
+
+    def _is_valid_account(self, account) -> bool:
+        if account - 1 < len(self.balance):
+            return True
+        return False
 
     def transfer(self, account1: int, account2: int, money: int) -> bool:
-        a1 = self.balance.get(account1 - 1, None)
-        a2 = self.balance.get(account2 - 1, None)
-        if a1 == None or a2 == None:
+        if not self._is_valid_account(account1):
             return False
-        if a1 - money < 0:
+        if not self._is_valid_account(account2):
             return False
-        self.balance[account1 - 1] -= money
-        self.balance[account2 - 1] += money
+        if not self.withdraw(account1, money):
+            return False
+        self.deposit(account2, money)
         return True
 
     def deposit(self, account: int, money: int) -> bool:
-        a = self.balance.get(account - 1, None)
-        if a == None:
+        if not self._is_valid_account(account - 1):
             return False
         self.balance[account - 1] += money
         return True
 
     def withdraw(self, account: int, money: int) -> bool:
-        a = self.balance.get(account - 1, None)
-        if a == None:
+        if not self._is_valid_account(account - 1):
             return False
-        if a - money < 0:
+        if self.balance[account - 1] - money < 0:
             return False
         self.balance[account - 1] -= money
         return True
