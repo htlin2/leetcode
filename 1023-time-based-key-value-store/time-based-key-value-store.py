@@ -9,12 +9,18 @@ class TimeMap:
     def get(self, key: str, timestamp: int) -> str:
         timestamp_values = self.cache[key]
         to_find = timestamp
-        idx = bisect.bisect_left(timestamp_values, [to_find, ])
-        if 0 <= idx < len(timestamp_values) and timestamp_values[idx][0] == timestamp:
-            return timestamp_values[idx][1]
-        if idx == 0:
-            return ''
-        return timestamp_values[idx - 1][1]
+        l, r = 0, len(timestamp_values) - 1
+        while l <= r:
+            m = (l + r) // 2
+            if timestamp_values[m][0] == timestamp:
+                return timestamp_values[m][1]
+            if timestamp_values[m][0] < timestamp:
+                l = m + 1
+            else:
+                r = m - 1
+        if 0 <= l - 1 < len(timestamp_values):
+            return timestamp_values[l - 1][1]
+        return ''
 
 
 # Your TimeMap object will be instantiated and called as such:
