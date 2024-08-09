@@ -24,7 +24,7 @@ TimeMap.prototype.set = function(key, value, timestamp) {
  */
 TimeMap.prototype.get = function(key, timestamp) {
     // binary search weight left
-    if (!this.cache[key]) return ''
+    if (!(key in this.cache)) return ''
     const timeValues = this.cache[key]
     const N = timeValues.length
     let l = 0
