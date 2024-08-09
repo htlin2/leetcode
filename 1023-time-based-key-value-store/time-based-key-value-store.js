@@ -1,6 +1,6 @@
 
 var TimeMap = function() {
-    this.cache = {} // key: [[time, value]]
+    this.cache = {} // key: [(timestamp, value), ()]
 };
 
 /** 
@@ -10,10 +10,10 @@ var TimeMap = function() {
  * @return {void}
  */
 TimeMap.prototype.set = function(key, value, timestamp) {
-    if (!this.cache[key]) {
-        this.cache[key] = [[timestamp, value]]
-    } else {
+    if (key in this.cache) {
         this.cache[key].push([timestamp, value])
+    } else {
+        this.cache[key] = [[timestamp, value]]
     }
 };
 
@@ -23,18 +23,24 @@ TimeMap.prototype.set = function(key, value, timestamp) {
  * @return {string}
  */
 TimeMap.prototype.get = function(key, timestamp) {
+    // binary search weight left
     if (!this.cache[key]) return ''
-    timeValues = this.cache[key]
+    const timeValues = this.cache[key]
+    const N = timeValues.length
     let l = 0
-    let r = timeValues.length - 1
+    let r = N - 1
     while (l <= r) {
         let m = Math.floor((l + r) / 2)
-        if (timeValues[m][0] === timestamp) return timeValues[m][1]
-        if (timeValues[m][0] < timestamp) {
-            l = m + 1
-        } else {
+        if (timeValues[m][0] == timestamp) {
             r = m - 1
+        } else if (timestamp < timeValues[m][0]) {
+            r = m - 1
+        } else {
+            l = m + 1
         }
+    }
+    if (0 <= l && l < N && timeValues[l][0] === timestamp) {
+        return timeValues[l][1]
     }
     if (l - 1 < 0) return ''
     return timeValues[l - 1][1]
