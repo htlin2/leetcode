@@ -1,6 +1,6 @@
 
 var HitCounter = function() {
-    this.cache = []
+    this.cache = [] // (timestamp, counts)
 };
 
 /** 
@@ -8,7 +8,15 @@ var HitCounter = function() {
  * @return {void}
  */
 HitCounter.prototype.hit = function(timestamp) {
-    this.cache.push(timestamp)
+    const min_time = timestamp - 300
+    while (this.cache.length && this.cache[0][0] <= min_time) {
+        this.cache.shift()
+    }
+    if (this.cache.length && this.cache[this.cache.length - 1][0] === timestamp) {
+        this.cache[this.cache.length - 1][1] += 1
+    } else {
+        this.cache.push([timestamp, 1])
+    }
 };
 
 /** 
@@ -16,20 +24,16 @@ HitCounter.prototype.hit = function(timestamp) {
  * @return {number}
  */
 HitCounter.prototype.getHits = function(timestamp) {
-    // binary search weight right
-    const N = this.cache.length
-    const toFind = timestamp - 300
-    let l = 0
-    let r = N - 1
-    while (l <= r) {
-        let m = Math.floor((l + r) / 2)
-        if (this.cache[m] <= toFind) {
-            l = m + 1
-        } else {
-            r = m - 1
-        }
+    const min_time = timestamp - 300
+    while (this.cache.length && this.cache[0][0] <= min_time) {
+        this.cache.shift()
     }
-    return N - l
+    let res = 0
+    for (const tuple of this.cache) {
+        const [key, value] = tuple
+        res += value
+    }
+    return res
 };
 
 /** 
