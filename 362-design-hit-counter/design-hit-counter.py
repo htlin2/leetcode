@@ -7,9 +7,7 @@ class HitCounter:
         min_time = timestamp - 300
         while self.q and self.q[0][0] <= min_time:
             self.q.popleft()
-        if not self.q:
-            self.q.append([timestamp, 1])
-        elif self.q[-1][0] == timestamp:
+        if self.q and self.q[-1][0] == timestamp:
             self.q[-1][-1] += 1
         else:
             self.q.append([timestamp, 1])
