@@ -2,9 +2,9 @@
  * @param {string} homepage
  */
 var BrowserHistory = function(homepage) {
-    this.bStacks = []
+    this.prevStack = []
+    this.nextStack = []
     this.curr = homepage
-    this.fStacks = []
 };
 
 /** 
@@ -12,9 +12,9 @@ var BrowserHistory = function(homepage) {
  * @return {void}
  */
 BrowserHistory.prototype.visit = function(url) {
-    this.fStacks = []
-    this.bStacks.push(this.curr.slice())
+    this.prevStack.push(this.curr.slice())
     this.curr = url
+    this.nextStack = []
 };
 
 /** 
@@ -22,10 +22,10 @@ BrowserHistory.prototype.visit = function(url) {
  * @return {string}
  */
 BrowserHistory.prototype.back = function(steps) {
-    while (this.bStacks.length && steps) {
+    while (this.prevStack.length && steps) {
         steps -= 1
-        this.fStacks.push(this.curr.slice())
-        this.curr = this.bStacks.pop()
+        this.nextStack.push(this.curr.slice())
+        this.curr = this.prevStack.pop()
     }
     return this.curr
 };
@@ -35,10 +35,10 @@ BrowserHistory.prototype.back = function(steps) {
  * @return {string}
  */
 BrowserHistory.prototype.forward = function(steps) {
-    while (this.fStacks.length && steps) {
+    while (this.nextStack.length && steps) {
         steps -= 1
-        this.bStacks.push(this.curr.slice())
-        this.curr = this.fStacks.pop()
+        this.prevStack.push(this.curr.slice())
+        this.curr = this.nextStack.pop()
     }
     return this.curr
 };
@@ -48,5 +48,5 @@ BrowserHistory.prototype.forward = function(steps) {
  * var obj = new BrowserHistory(homepage)
  * obj.visit(url)
  * var param_2 = obj.back(steps)
- * var param_3 = obj.fStacks(steps)
+ * var param_3 = obj.forward(steps)
  */
