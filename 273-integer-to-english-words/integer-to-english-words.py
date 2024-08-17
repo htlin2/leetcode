@@ -1,7 +1,7 @@
 class Solution:
     def numberToWords(self, num: int) -> str:
         NUM_MAP = {
-            0: "",
+            0: "Zero",
             1: "One",
             2: "Two",
             3: "Three",
@@ -34,8 +34,6 @@ class Solution:
             1000000: "Million",
             1000000000: "Billion"
         }
-        if num == 0:
-            return 'Zero'
         if num <= 20:
             return NUM_MAP[num]
         if num < 100:
