@@ -4,26 +4,25 @@ class Solution:
         ROWS, COLS = len(grid), len(grid[0])
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         visited = set() # (r, c)
-        found = False
         def dfs(r, c, idx):
-            nonlocal found
-            if found: return
             if idx >= len(word):
-                found = True
-                return
-            if r < 0 or c < 0 or r >= ROWS or c >= COLS: return
-            if (r, c) in visited: return
-            if grid[r][c] != word[idx]: return
+                return True
+            if r < 0 or c < 0 or r >= ROWS or c >= COLS: 
+                return False
+            if (r, c) in visited: return False
+            if grid[r][c] != word[idx]: return False
             visited.add((r, c))
             for dr, dc in directions:
-                dfs(r + dr, c + dc, idx + 1)
+                if dfs(r + dr, c + dc, idx + 1):
+                    return True
             visited.remove((r, c))
+            return False
         
-        idx = 0
         for r in range(ROWS):
             for c in range(COLS):
-                dfs(r, c, idx)
-        return found
+                if dfs(r, c, 0):
+                    return True
+        return False
 """
 backtracking
 ABCCED
