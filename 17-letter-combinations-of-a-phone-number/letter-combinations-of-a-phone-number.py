@@ -14,12 +14,10 @@ class Solution:
         N = len(digits)
         res = []
         def dfs(temp, i):
-            nonlocal res
             if len(temp) == N:
                 res.append(temp[:])
                 return
-            d = digits[i]
-            for char in adj[d]:
+            for char in adj[digits[i]]:
                 dfs(temp + char, i + 1)
         dfs('', 0)
         return res
