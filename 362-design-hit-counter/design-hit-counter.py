@@ -8,9 +8,18 @@ class HitCounter:
 
     def getHits(self, timestamp: int) -> int:
         # bisect right
+        N = len(self.cache)
         to_find = timestamp - 300
-        lower_bound = bisect.bisect_right(self.cache, to_find)
-        return len(self.cache) - lower_bound
+        l, r = 0, N - 1
+        while l <= r:
+            m = (l + r) // 2
+            if self.cache[m] == to_find:
+                l = m + 1
+            elif self.cache[m] < to_find:
+                l = m + 1
+            else:
+                r = m - 1
+        return N - l
 
 
 
