@@ -7,7 +7,7 @@ class HitCounter:
         self.cache.append(timestamp)
 
     def getHits(self, timestamp: int) -> int:
-        # bisect right
+        # bisect right (bs weight right)
         N = len(self.cache)
         to_find = timestamp - 300
         l, r = 0, N - 1
