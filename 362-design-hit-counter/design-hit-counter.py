@@ -1,25 +1,17 @@
 class HitCounter:
 
     def __init__(self):
-        self.q = collections.deque([]) # (timestamp, count)
+        self.cache = []
 
     def hit(self, timestamp: int) -> None:
-        min_time = timestamp - 300
-        while self.q and self.q[0][0] <= min_time:
-            self.q.popleft()
-        if self.q and self.q[-1][0] == timestamp:
-            self.q[-1][-1] += 1
-        else:
-            self.q.append([timestamp, 1])
+        self.cache.append(timestamp)
 
     def getHits(self, timestamp: int) -> int:
-        min_time = timestamp - 300
-        while self.q and self.q[0][0] <= min_time:
-            self.q.popleft()
-        res = 0
-        for t, c in self.q:
-            res += c
-        return res
+        # bisect right
+        to_find = timestamp - 300
+        lower_bound = bisect.bisect_right(self.cache, to_find)
+        return len(self.cache) - lower_bound
+
 
 
 # Your HitCounter object will be instantiated and called as such:
