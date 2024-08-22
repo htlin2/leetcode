@@ -5,11 +5,11 @@ class MinStack:
         self.min_stack = []
 
     def push(self, val: int) -> None:
-        self.stack.append(val)
+        min_val = val
         if self.min_stack:
-            self.min_stack.append(min(self.min_stack[-1], val))
-        else:
-            self.min_stack.append(val)
+            min_val = min(min_val, self.min_stack[-1])
+        self.min_stack.append(min_val)
+        self.stack.append(val)
 
     def pop(self) -> None:
         self.stack.pop()
@@ -28,3 +28,8 @@ class MinStack:
 # obj.pop()
 # param_3 = obj.top()
 # param_4 = obj.getMin()
+
+"""
+stack: -2, 0,-1,
+min  : -2,-2,-2,
+"""
