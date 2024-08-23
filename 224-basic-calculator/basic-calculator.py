@@ -1,32 +1,41 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        s = s.replace(' ', '')
-        res, cur = 0, 0
-        sign = 1
         stack = []
+        res, curr = 0, 0
+        sign = 1
         for char in s:
             if char.isdigit():
-                cur = cur * 10 + int(char)
+                curr = curr * 10 + int(char)
             elif char in ['+', '-']:
-                print(res, cur, sign)
-                res += sign * cur
+                res += curr * sign
                 sign = 1 if char == '+' else -1
-                cur = 0
+                curr = 0
             elif char == '(':
                 stack.append(res)
                 stack.append(sign)
-                sign = 1
                 res = 0
-            elif char == ')':
-                res += sign * cur
-                res *= stack.pop()
-                res += stack.pop()
                 sign = 1
-                cur = 0
-        return res + sign * cur
-        
-        
+            elif char == ')':
+                res += curr * sign
+                curr = 0
+                stack_sign = stack.pop()
+                res = stack.pop() + stack_sign * res
+                sign = 1
+        return res + curr * sign
+
 """
-Input: s = "(1+(4+5+2)-3)+(6+8)"
-Output: 23
+stack = []
+temp = 1
+prev_sign = +
+-(1+(4+5+2)-3)+(6+8)
+  1+   11  - 3 + 14
+
+if digit:
+    add to temp
+elif sign:
+    multiply temp with sign
+( => append temp to stack, reset temp to 0, rest prev_sign = +
+) => pop stacks and sum up
+
+
 """
