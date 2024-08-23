@@ -1,15 +1,11 @@
 class Solution:
     def fib(self, n: int) -> int:
-        memo = {}
-        def dfs(n):
-            if n in memo:
-                return memo[n]
-            if n < 2:
-                return n
-            memo[n] = dfs(n - 1) + dfs(n - 2)
-            return memo[n]
-        return dfs(n)
-
+        prev, curr = 0, 1
+        for _ in range(n):
+            temp = curr + prev
+            prev = curr
+            curr = temp
+        return prev
 """
 1. recurrsion
     dfs
