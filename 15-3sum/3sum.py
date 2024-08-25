@@ -1,16 +1,44 @@
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
-        ans = set()
         nums.sort()
-        for i in range(len(nums) - 2):
-            l, r = i + 1, len(nums) - 1
-            while l < r:
-                total = nums[i] + nums[l] + nums[r]
+        res = set()
+        def two_sum(i, left, right):
+            nonlocal res
+            while left < right:
+                total = nums[i] + nums[left] + nums[right]
                 if total == 0:
-                    ans.add((nums[i], nums[l], nums[r]))
-                    l, r = l + 1, r - 1
-                elif total < 0:
-                    l += 1
+                    res.add((nums[i], nums[left], nums[right]))
+                if total <= 0:
+                    left += 1
                 else:
-                    r -= 1
-        return ans
+                    right -= 1
+        N = len(nums)
+        for i in range(N - 2):
+            if i - 1 >= 0 and nums[i] == nums[i - 1]:
+                continue
+            two_sum(i, i + 1, N - 1)
+        return list(res)
+
+
+"""
+for loop + 2 pointers
+-1, -1, 2
+-1 0 1
+[-4,-1,-1,0,1,2]
+
+def two_sum(i, left, right):
+    while left < right:
+        total = i + left + right
+        if total == 0:
+            append [i, left, right]
+        if total <= 0:
+            left += 1
+        else:
+            right -= 1
+    
+for loop:
+    if i == prev_i:
+        skip
+    two_sum(i, i + 1, N - 1)
+
+"""
