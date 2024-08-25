@@ -1,22 +1,22 @@
 class Leaderboard:
 
     def __init__(self):
-        self.player_score = {}
+        self.cache = collections.defaultdict(int)
 
     def addScore(self, playerId: int, score: int) -> None:
-        if not playerId in self.player_score:
-            self.player_score[playerId] = 0
-        self.player_score[playerId] += score
+        self.cache[playerId] += score
 
     def top(self, K: int) -> int:
-        scores = self.player_score.values()
-        sorted_scores = sorted(scores)[::-1]
-        top_k = sorted_scores[:K]
-        return sum(top_k)
-
+        scores = [ -v for v in self.cache.values()]
+        heapq.heapify(scores)
+        res = 0
+        while K:
+            res += heapq.heappop(scores)
+            K -= 1
+        return abs(res)
 
     def reset(self, playerId: int) -> None:
-        del self.player_score[playerId]
+        self.cache[playerId] = 0
 
 
 # Your Leaderboard object will be instantiated and called as such:
@@ -24,13 +24,3 @@ class Leaderboard:
 # obj.addScore(playerId,score)
 # param_2 = obj.top(K)
 # obj.reset(playerId)
-
-
-# hashset + max_heap
-# hashset to track players that rest score
-# max_heap to get top k
-
-"""
-["Leaderboard","addScore","addScore","addScore","addScore","addScore","addScore","addScore","addScore","addScore","addScore","top","reset","reset","addScore","addScore","top","reset","reset","addScore","reset"]
-
-"""
