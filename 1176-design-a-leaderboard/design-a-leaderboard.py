@@ -7,12 +7,12 @@ class Leaderboard:
         self.cache[playerId] += score
 
     def top(self, K: int) -> int:
-        scores = [ -v for v in self.cache.values()]
-        heapq.heapify(scores)
-        res = 0
-        while K:
-            res += heapq.heappop(scores)
-            K -= 1
+        scores = []
+        for score in self.cache.values():
+            heapq.heappush(scores, score)
+            if len(scores) > K:
+                heapq.heappop(scores)
+        res = sum(scores)
         return abs(res)
 
     def reset(self, playerId: int) -> None:
