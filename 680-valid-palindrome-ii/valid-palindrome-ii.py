@@ -1,24 +1,44 @@
 class Solution:
     def validPalindrome(self, s: str) -> bool:
-        def is_palin(l, r):
-            while l <= r:
-                if l == r: return True
-                if s[l] != s[r]: return False
-                l += 1
-                r -= 1
+        def is_palindrome(left, right):
+            while left <= right:
+                if left == right: return True
+                if s[left] != s[right]: return False
+                left += 1
+                right -= 1
             return True
         N = len(s)
-        l, r = 0, N - 1
-        while l <= r:
-            if l == r: return True
-            if s[l] == s[r]:
-                l += 1
-                r -= 1
+        left, right = 0, N - 1
+        while left <= right:
+            if left == right: return True
+            if s[left] == s[right]:
+                left += 1
+                right -= 1
             else:
-                return is_palin(l + 1, r) or is_palin(l, r - 1)
+                return is_palindrome(left + 1, right) or is_palindrome(left, right - 1)
         return True
+
+
 """
-two pointers
-abca
+what is palindrome?
+abc => no
+abca => yes
+aba => yes
+
+abba => yes
+'' => yes
+cabba => yes
+
+1. two pointers
+cabba
+l   r
+ l  r 
+  lr
+
+ab ca
+l   r
+ l r
  lr
+l++ or r--
+
 """
