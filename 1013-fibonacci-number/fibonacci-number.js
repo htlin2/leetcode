@@ -3,12 +3,15 @@
  * @return {number}
  */
 var fib = function(n) {
-    const dp = Array(n + 1).fill(0)
-    dp[1] = 1
-    for (let i = 2; i <= n; i+=1) {
-        dp[i] = dp[i - 1] + dp[i - 2]
+    if (n < 2) return n
+    let prev = 0
+    let curr = 1
+    for (let i = 2; i <= n; i++) {
+        const temp = prev + curr
+        prev = curr
+        curr = temp
     }
-    return dp[n]
+    return curr
 };
 
 /*
