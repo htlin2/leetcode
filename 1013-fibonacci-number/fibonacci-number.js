@@ -3,14 +3,12 @@
  * @return {number}
  */
 var fib = function(n) {
-    const memo = {}
-    function fibMemo(n) {
-        if (n in memo) return memo[n]
-        if (n < 2) return n
-        memo[n] = fibMemo(n - 1) + fibMemo(n - 2)
-        return memo[n]
+    const dp = Array(n + 1).fill(0)
+    dp[1] = 1
+    for (let i = 2; i <= n; i+=1) {
+        dp[i] = dp[i - 1] + dp[i - 2]
     }
-    return fibMemo(n)
+    return dp[n]
 };
 
 /*
@@ -21,6 +19,6 @@ base: if n < 2: return n
 base: if n < 2: return n
     memo[i] = dfs(n - 1) + dfs(n - 2)
 3. tabulation
-
+    
 4. optimized tabulation
 */
