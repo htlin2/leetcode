@@ -3,8 +3,14 @@
  * @return {number}
  */
 var fib = function(n) {
-    if (n < 2) return n
-    return fib(n - 1) + fib(n - 2)
+    const memo = {}
+    function fibMemo(n) {
+        if (n in memo) return memo[n]
+        if (n < 2) return n
+        memo[n] = fibMemo(n - 1) + fibMemo(n - 2)
+        return memo[n]
+    }
+    return fibMemo(n)
 };
 
 /*
