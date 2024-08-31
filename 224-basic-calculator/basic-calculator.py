@@ -1,41 +1,50 @@
 class Solution:
     def calculate(self, s: str) -> int:
         stack = []
-        res, curr = 0, 0
+        digits = 0
+        curr_sum = 0
         sign = 1
         for char in s:
             if char.isdigit():
-                curr = curr * 10 + int(char)
-            elif char in ['+', '-']:
-                res += curr * sign
+                digits = digits * 10 + int(char)
+            elif char in '+-':
+                curr_sum += sign * digits
                 sign = 1 if char == '+' else -1
-                curr = 0
+                digits = 0
             elif char == '(':
-                stack.append(res)
-                stack.append(sign)
-                res = 0
-                sign = 1
+                stack.append((curr_sum, sign))
+                curr_sum, sign = 0, 1
             elif char == ')':
-                res += curr * sign
-                curr = 0
-                stack_sign = stack.pop()
-                res = stack.pop() + stack_sign * res
-                sign = 1
-        return res + curr * sign
+                curr_sum += (sign * digits)
+                sign, digits = 1, 0
+                prev_sum, prev_sign = stack.pop()
+                curr_sum = prev_sum + (prev_sign * curr_sum)
+        return curr_sum + sign * digits
 
 """
-stack = []
-temp = 1
-prev_sign = +
--(1+(4+5+2)-3)+(6+8)
-  1+   11  - 3 + 14
+stack = [9]
+time: O(n)
+space: O(n)
 
-if digit:
-    add to temp
-elif sign:
-    multiply temp with sign
-( => append temp to stack, reset temp to 0, rest prev_sign = +
-) => pop stacks and sum up
-
-
+-(3+(4+5))
+stack = [(0, -), (3, +)]
+res = 9
+sign = 1
+digits = 0
+iterate through s:
+    if char is digit:
+        digits = digits * 10 + Number(char)
+    if char is [+, -]:
+        res += digits
+        reset digits
+        sign = -1
+    if char == (:
+        stack.push([res, sign])
+        reset sign, res
+    if char == ):
+        res += sign * digits
+        reset sign, digits
+        const [prevRes, prevSign] = stack.pop()
+        res = prevres + (prevSign * res)
+return res + curr * sign
 """
