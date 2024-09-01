@@ -4,11 +4,8 @@
  */
 class UnionFind {
     constructor(N) {
-        this.parents = []
+        this.parents = Array(N).fill(1).map((e, idx) => idx)
         this.ranks = Array(N).fill(1)
-        for (let i = 0; i < N; i++) {
-            this.parents.push(i)
-        }
     }
     
     find(n) {
