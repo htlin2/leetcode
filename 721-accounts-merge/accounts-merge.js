@@ -2,39 +2,69 @@
  * @param {string[][]} accounts
  * @return {string[][]}
  */
-var accountsMerge = function(accounts) {
-    const emailIndex = {} // email: [1, 2, 3]
-    accounts.forEach((a, i) => {
-        for (const email of a.slice(1)) {
-            if (email in emailIndex) {
-                emailIndex[email].push(i)
-            } else {
-                emailIndex[email] = [i]
-            }
-        }
-    })
-    const visited = new Set()
-    function dfs(i, emailSet) {
-        if (i in visited) return
-        visited.add(i)
-        const account = accounts[i]
-        for (const email of account.slice(1)) {
-            emailSet.add(email)
-            for (const nei of emailIndex[email]) {
-                if (visited.has(nei)) continue
-                dfs(nei, emailSet)
-            }
+class UnionFind {
+    constructor(N) {
+        this.parents = []
+        this.ranks = Array(N).fill(1)
+        for (let i = 0; i < N; i++) {
+            this.parents.push(i)
         }
     }
+    
+    find(n) {
+        if (this.parents[n] === n) return n
+        this.parents[n] = this.find(this.parents[this.parents[n]])
+        return this.parents[n]
+    }
 
-    const res = []
-    accounts.forEach((a, i) => {
-        if (visited.has(i)) return
-        const name = a[0]
-        const emailSet = new Set()
-        dfs(i, emailSet)
-        const emails = [...emailSet].sort()
-        res.push([name, ...emails])
+    union(n1, n2) {
+        const [p1, p2] = [this.find(n1), this.find(n2)]
+        if (p1 === p2) return false
+        if (this.ranks[p1] >= this.ranks[p2]) {
+            this.ranks[p1] += this.ranks[p2]
+            this.parents[p2] = p1
+        } else {
+            this.ranks[p2] += this.ranks[p1]
+            this.parents[p1] = p2
+        }
+        return true
+    }
+}
+var accountsMerge = function(accounts) {
+    const emailToIdx = {} // email: accountIdx
+    const uf = new UnionFind(accounts.length)
+    accounts.forEach((account, idx) => {
+        const emails = account.slice(1)
+        emails.forEach(email => {
+            if (email in emailToIdx) {
+                uf.union(idx, emailToIdx[email])
+            }
+            emailToIdx[email] = uf.find(idx)
+        })
     })
+
+    const parentIdxToIndices = {} // parentIdx: [idx1, idx2]
+    accounts.forEach((account, idx) => {
+        const parentIdx = uf.find(idx)
+        if (!(parentIdx in parentIdxToIndices)) {
+            parentIdxToIndices[parentIdx] = new Set()
+        }
+        parentIdxToIndices[parentIdx].add(idx)
+    })
+    
+    const res = []
+    for (const [parentIdx, indices] of Object.entries(parentIdxToIndices)) {
+        const account = accounts[Number(parentIdx)]
+        const name = account[0]
+        const emails = []
+        for (const idx of indices) {
+            const childAccount = accounts[idx].slice(1)
+            emails.push(...childAccount)
+        }
+        const uniqueEmails = new Set(emails)
+        const sortEmailAccounts = [...uniqueEmails]
+        sortEmailAccounts.sort()
+        res.push([name, ...sortEmailAccounts])
+    }
     return res
 };
