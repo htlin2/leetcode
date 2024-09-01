@@ -4,10 +4,7 @@
  */
 var merge = function(intervals) {
     if (!intervals.length) return []
-    intervals.sort((a, b) => {
-        if (a[0] < b[0]) return -1
-        return 1
-    })
+    intervals.sort((a, b) => a[0] - b[0])
     const stack = []
     for (let i = 0; i < intervals.length; i++) {
         if (i === 0) {
