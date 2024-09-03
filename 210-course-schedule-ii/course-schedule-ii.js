@@ -11,20 +11,21 @@ var findOrder = function(N, prerequisites) {
     for (const [req, crs] of prerequisites) {
         adj[req].push(crs)
     }
-    const visited = new Set()
-    function dfs(course, cycle) {
+    const [visited, cycle] = [new Set(), new Set()]
+    function dfs(course) {
         if (visited.has(course)) return true;
         if (cycle.has(course)) return false;
         cycle.add(course);
         for (const nei of adj[course]) {
-            if (!dfs(nei, cycle)) return false
+            if (!dfs(nei)) return false
         }
         visited.add(course)
+        cycle.delete(course)
         return true
     }
 
     for (let i = 0; i < N; i++) {
-        if (!dfs(i, new Set())) return []
+        if (!dfs(i)) return []
     }
     return visited.size === N ? [...visited] : []
 };
