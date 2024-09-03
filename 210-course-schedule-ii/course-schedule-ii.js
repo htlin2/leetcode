@@ -4,19 +4,19 @@
  * @return {number[]}
  */
 var findOrder = function(N, prerequisites) {
-    const adj = {}
+    const adj = new Map()
     for (let i = 0; i < N; i++) {
-        adj[i] = []
+        adj.set(i, [])
     }
     for (const [req, crs] of prerequisites) {
-        adj[req].push(crs)
+        adj.get(req).push(crs)
     }
     const [visited, cycle] = [new Set(), new Set()]
     function dfs(course) {
         if (visited.has(course)) return true;
         if (cycle.has(course)) return false;
         cycle.add(course);
-        for (const nei of adj[course]) {
+        for (const nei of adj.get(course)) {
             if (!dfs(nei)) return false
         }
         visited.add(course)
