@@ -1,6 +1,5 @@
 class TrieNode {
-    constructor(val) {
-        this.val = val
+    constructor() {
         this.children = {}
         this.isEnd = false
     }
@@ -8,7 +7,7 @@ class TrieNode {
 
 
 var Trie = function() {
-    this.root = new TrieNode('root')
+    this.root = new TrieNode()
 };
 
 /** 
@@ -19,7 +18,7 @@ Trie.prototype.insert = function(word) {
     let node = this.root
     for (char of word) {
         if (!(char in node.children)) {
-            node.children[char] = new TrieNode(char)
+            node.children[char] = new TrieNode()
         }
         node = node.children[char]
     }
