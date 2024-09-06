@@ -5,21 +5,9 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def isValidBST(self, root: Optional[TreeNode]) -> bool:
-        ans = True
-        def dfs(node, left, right):
-            nonlocal ans
-            if ans == False: return
-            if not node: return
-            if not (left < node.val < right):
-                ans = False
-                return
-            dfs(node.left, left, min(node.val, right))
-            dfs(node.right, max(node.val, left), right)
-        dfs(root, float('-inf'), float('inf'))
-        return ans
-
-"""
-DFS - postorder
-
-"""
+    def isValidBST(self, root: Optional[TreeNode], left=float('-inf'), right=float('inf')) -> bool:
+        if not root: return True
+        if not (left < root.val < right): return False
+        left_res = self.isValidBST(root.left, left, root.val)
+        right_res = self.isValidBST(root.right, root.val, right)
+        return left_res and right_res
