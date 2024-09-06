@@ -17,23 +17,21 @@ class WordDictionary:
 
     def search(self, word: str) -> bool:
         N = len(word)
-        def dfs(node, i):
-            if i == N and node.is_end:
-                return True
-            if i >= N:
-                return False
-            for j in range(i, N):
-                char = word[j]
-                if char == '.':
-                    for n in node.children.values():
-                        if dfs(n, j + 1):
-                            return True
-                    return False
-                else:
+        def dfs(node, j):
+            for i in range(j, N):
+                char = word[i]
+                if char != '.':
                     if not char in node.children:
                         return False
-                    return dfs(node.children[char], i + 1)
+                    node = node.children[char]
+                else:
+                    for nei in node.children.values():
+                        if dfs(nei, i + 1):
+                            return True
+                    return False
+            return node.is_end
         return dfs(self.root, 0)
+    
 
 # Your WordDictionary object will be instantiated and called as such:
 # obj = WordDictionary()
