@@ -1,40 +1,31 @@
 class Solution:
     def orangesRotting(self, grid: List[List[int]]) -> int:
-        directions = [[0, 1], [0, -1], [1, 0], [-1, 0]]
+        directions = [[1, 0], [-1, 0], [0, 1], [0, -1]]
         ROWS, COLS = len(grid), len(grid[0])
-        one_count = 0
+        good_count = 0
+        minutes = -1
         q = collections.deque([])
-        for r in range(ROWS):
-            for c in range(COLS):
-                if grid[r][c] == 2:
-                    q.append([r, c])
-                elif grid[r][c] == 1:
-                    one_count += 1
-        if not q and not one_count: return 0
-        res = -1
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid[row][col] == 1:
+                    good_count += 1
+                elif grid[row][col] == 2:
+                    q.append([row, col])
+        if not q and good_count:
+            return -1
+        if not q and not good_count:
+            return 0
         while q:
-            res += 1
+            minutes += 1
             for _ in range(len(q)):
-                r, c = q.popleft()
+                row, col = q.popleft()
                 for dr, dc in directions:
-                    rr, cc = r + dr, c + dc
-                    if rr < 0 or cc < 0 or rr >= ROWS or cc >= COLS: continue
-                    if grid[rr][cc] == 1:
-                        grid[rr][cc] = 2
-                        q.append([rr, cc])
-                        one_count -= 1
-        return -1 if one_count else res
-
-"""
-[
-    [2,1,1],
-    [0,1,1],
-    [1,0,1]
-]
-BFS
-get all rotten oranges and put in queue
-run bfs to change fresh oranges to rotten
-track how many counts
-edge case: if there is still a 1, return -1 
-return counts
-"""
+                    adj_row, adj_col = dr + row, dc + col
+                    if not (0 <= adj_row < ROWS and 0 <= adj_col < COLS):
+                        continue
+                    if grid[adj_row][adj_col] != 1:
+                        continue
+                    grid[adj_row][adj_col] = 2
+                    q.append([adj_row, adj_col])
+                    good_count -= 1
+        return minutes if good_count == 0 else -1
