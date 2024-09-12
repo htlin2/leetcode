@@ -3,16 +3,17 @@ class Solution:
         i, j = 0, 0
         while i < len(word) and j < len(abbr):
             if not abbr[j].isdigit():
-                if word[i] != abbr[j]: 
-                    return False
-                i += 1
-                j += 1
-            elif abbr[j] == '0': 
+                if word[i] == abbr[j]:
+                    i += 1
+                    j += 1
+                    continue
+                return False
+            elif abbr[j] == '0':
                 return False
             else:
-                digits = 0
+                to_skip = 0
                 while j < len(abbr) and abbr[j].isdigit():
-                    digits = digits * 10 + int(abbr[j])
+                    to_skip = to_skip * 10 + int(abbr[j])
                     j += 1
-                i += digits
+                i += to_skip
         return i == len(word) and j == len(abbr)
