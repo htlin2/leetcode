@@ -1,11 +1,13 @@
+import collections, heapq
+
 class Solution:
     def leastInterval(self, tasks: List[str], n: int) -> int:
         counter = collections.Counter(tasks)
-        max_heap = [-v for v in counter.values()]
+        max_heap = [-count for count in counter.values()]
         heapq.heapify(max_heap)
-        q = collections.deque() # (count, time)
+        q = collections.deque() # (-count, cooling_time)
         time = 0
-        while max_heap or q:
+        while q or max_heap:
             time += 1
             if max_heap:
                 count = heapq.heappop(max_heap) + 1
@@ -15,3 +17,8 @@ class Solution:
                 count, _ = q.popleft()
                 heapq.heappush(max_heap, count)
         return time
+
+
+"""
+max heap + q
+"""
