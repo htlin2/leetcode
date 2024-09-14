@@ -7,19 +7,21 @@
 class Solution:
     def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
         nums = []
-        def dfs(node, nums):
-            if not node: return
+        def preorder(node):
+            if not node:
+                return
+            preorder(node.left)
+            if len(nums) == k:
+                return
             nums.append(node.val)
-            dfs(node.left, nums)
-            dfs(node.right, nums)
-        dfs(root, nums)
-        nums.sort()
-        return nums[k - 1]
+            preorder(node.right)
+        preorder(root)
+        return nums.pop()
 
 """
-1. get all node val + sort
+1. preorder dfs and get all node val + sort
 Time: O(n log n)
-Space: O(n)
+Space: O(log n)
 
 2. post-order dfs
 left
