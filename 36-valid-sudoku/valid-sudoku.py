@@ -1,19 +1,28 @@
 class Solution:
-    def isValidSudoku(self, board: List[List[str]]) -> bool:
-        ROWS, COLS = len(board), len(board[0])
-        r_map = collections.defaultdict(set)
-        c_map = collections.defaultdict(set)
-        d_map = collections.defaultdict(set)
-        for r in range(ROWS):
-            for c in range(COLS):
-                if board[r][c] == '.': continue
-                if board[r][c] in r_map[r]: return False
-                if board[r][c] in c_map[c]: return False
-                r_map[r].add(board[r][c])
-                c_map[c].add(board[r][c])
-                
-                d_r = r // 3
-                d_c = c // 3
-                if board[r][c] in d_map[d_r, d_c]: return False
-                d_map[d_r, d_c].add(board[r][c])
+    def isValidSudoku(self, grid: List[List[str]]) -> bool:
+        row_map = collections.defaultdict(set) # row_num: set()
+        col_map = collections.defaultdict(set) # col_num: set()
+        diag_map = collections.defaultdict(set) # (row, col): set()
+        for r in range(len(grid)):
+            for c in range(len(grid[0])):
+                n = grid[r][c]
+                if n == '.':
+                    continue
+                if n in row_map[r] or n in col_map[c]:
+                    return False
+                row_map[r].add(n)
+                col_map[c].add(n)
+
+                # check diag
+                diag_tup = (r // 3, c // 3)
+                if n in diag_map[diag_tup]:
+                    return False
+                diag_map[diag_tup].add(n)
         return True
+
+"""
+diag_map
+row, col = 0, 3 => row // 3, col // 3  => (0, 1)
+row, col = 3, 3 => row // 3, col // 3  => (1, 1)
+row, col = 3, 2 => row // 3, col // 3  => (1, 0)
+"""
