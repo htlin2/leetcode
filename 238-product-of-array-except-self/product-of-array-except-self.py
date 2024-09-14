@@ -1,23 +1,18 @@
 class Solution:
     def productExceptSelf(self, nums: List[int]) -> List[int]:
         N = len(nums)
-        prefix = []
-        curr_prefix = 1
-        for n in nums:
-            curr_prefix *= n
-            prefix.append(curr_prefix)
         postfix = []
         curr_postfix = 1
         for i in range(N - 1, -1, -1):
             curr_postfix *= nums[i]
             postfix.append(curr_postfix)
         postfix.reverse()
-        res = []
+        prefix = 1
         for i in range(N):
-            pre = prefix[i - 1] if i - 1 >= 0 else 1
-            post = postfix[i + 1] if i + 1 < N else 1
-            res.append(pre * post)
-        return res
+            postfix[i] = postfix[i + 1] if i + 1 < N else 1
+            postfix[i] *= prefix
+            prefix *= nums[i]
+        return postfix
 
 """
 Input: nums = [1,2,3,4]
