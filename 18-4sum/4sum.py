@@ -2,7 +2,6 @@ class Solution:
     def fourSum(self, nums: List[int], target: int) -> List[List[int]]:
         nums.sort()
         ans = set()
-        N = len(nums)
         def two_sum(left, right, curr_sum):
             res = set()
             while left < right:
@@ -14,14 +13,14 @@ class Solution:
                 else:
                     right -= 1
             return res
-        def k_sum(left, right, k, temp):
+        def k_sum(i, k, temp):
             if k < 2: return
             if k == 2:
-                two_sums = two_sum(left, right, sum(temp))
+                two_sums = two_sum(i, len(nums) - 1, sum(temp))
                 for one, two in two_sums:
                     ans.add((*temp, one, two))
             else:
-                for i in range(left, right + 1):
-                    k_sum(i + 1, right, k - 1, temp + [nums[i]])
-        k_sum(0, N - 1, 4, [])
+                for j in range(i, len(nums)):
+                    k_sum(j + 1, k - 1, temp + [nums[j]])
+        k_sum(0, 4, [])
         return ans
