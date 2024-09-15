@@ -1,29 +1,47 @@
 class Solution:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
-        # helper func to cal total hours
-        def helper(piles, speed):
-            res = 0
-            for p in piles:
-                res += math.ceil(p / speed)
-            return res
         left, right = 1, max(piles)
+        res = right
         while left <= right:
             mid = (left + right) // 2
-            hrs = helper(piles, mid)
-            if hrs <= h:
-                # decrease speed, eating too fast
+            total_hours = sum([math.ceil(p / mid) for p in piles])
+            if total_hours == h:
+                # can we slow down more?
+                right = mid - 1
+            elif total_hours < h:
+                # eating too fast, slow down
                 right = mid - 1
             else:
-                # increase speed, eating too slow
+                # eating too slow, speed up
                 left = mid + 1
         return left
+
+
 """
-In: 
-out(speed) = 4
-[3,6,7,11], h = 8
-[1,2,2,3] = 8
-binary search weighted left left = 1, right = 11
-mid = (1 + 11) / 2 = 6
-[1,1,2,2] = 6
-eating too fast, decrease speed, right = m - 1
+Input: piles = [3,6,7,11], h = 8
+Output: 4
+
+[ 3, 6, 7,11]
+left = 3
+right = 11
+mid = (3 + 11) // 2 = 7
+[1, 1, 1, 2] => 5 hours => 5 hours < 8, eating too fast need slow down
+
+left = 3
+right = 7
+mid = (3 + 7) // 2 = 5
+[ 1, 2, 2, 3] => 8 hours => 8 == 8, meet h, but can we slow down more?
+binary search weight left
+
+left = 3
+right = 5
+mid = (3 + 5) // 2 = 4
+[ 1, 2, 2, 3] => 8 hours => 8 == 8, meet h, but can we slow down more?
+binary search weight left
+
+left = 3
+right = 4
+mid = (3 + 4) // 2 = 3
+[1, 2, 3, 4] => 10 hrs > h, eating too slow need to speed up
+
 """
