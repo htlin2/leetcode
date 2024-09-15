@@ -27,11 +27,17 @@ class Solution:
         for i in range(0, len(lists), 2):
             A = lists[i]
             B = lists[i + 1] if i + 1 < len(lists) else None
-            merged = self.merge(A, B)
-            res.append(merged)
+            combined = self.merge(A, B)
+            res.append(combined)
         return self.mergeKLists(res)
 
-"""
-recurrsion + merge
 
+"""
+Base:
+    if not lists: return lists
+    if len(lists) == 1: return lists[0]
+iterate lists
+    merge A, B 
+recursively call mergeKLists
+Time: O(n log n)
 """
