@@ -10,7 +10,7 @@ class Twitter:
     def postTweet(self, userId: int, tweetId: int) -> None:
         # hashmap = {userId: [tweetId1, tweetId2]} least recent -> most recent
         self.user_tweet[userId].append((self.time, tweetId))
-        self.time += 1
+        self.time -= 1
 
     def getNewsFeed(self, userId: int) -> List[int]:
         # most recent -> least recent limit 10
@@ -19,8 +19,12 @@ class Twitter:
         tweets = []
         for followeeId in followeeIds:
             tweets += self.user_tweet[followeeId]
-        tweets.sort(reverse=True, key=lambda e: e[0])
-        return [t[-1] for t in tweets[:10]]
+        heapq.heapify(tweets)
+        res = []
+        while tweets and len(res) < 10:
+            time, tweetId = heapq.heappop(tweets)
+            res.append(tweetId)
+        return res
 
     def follow(self, followerId: int, followeeId: int) -> None:
         # follower_followee = {followerId: set(followeeId)}
