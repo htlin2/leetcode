@@ -21,29 +21,27 @@ class Solution:
             return True
 
         res = []
-        def backtrack(c, grid):
+        def backtrack(c):
             if c >= n:
-                joined_grid = []
-                for grid_row in grid:
-                    joined_grid.append(''.join(grid_row))
-                res.append(joined_grid)
+                copy_grid = [''.join(row) for row in grid]
+                res.append(copy_grid)
                 return
             for r in range(n):
-                if is_valid(r, c):
-                    grid[r][c] = 'Q'
-                    row.add(r)
-                    col.add(c)
-                    positive_diag.add(r + c)
-                    negative_diag.add(r - c)
+                if not is_valid(r, c): continue
+                grid[r][c] = 'Q'
+                row.add(r)
+                col.add(c)
+                positive_diag.add(r + c)
+                negative_diag.add(r - c)
 
-                    backtrack(c + 1, grid)
+                backtrack(c + 1)
 
-                    grid[r][c] = '.'
-                    row.remove(r)
-                    col.remove(c)
-                    positive_diag.remove(r + c)
-                    negative_diag.remove(r - c)
-        backtrack(0, grid)
+                grid[r][c] = '.'
+                row.remove(r)
+                col.remove(c)
+                positive_diag.remove(r + c)
+                negative_diag.remove(r - c)
+        backtrack(0)
         return res
 
 """
