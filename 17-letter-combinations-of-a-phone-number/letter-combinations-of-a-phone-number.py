@@ -1,6 +1,7 @@
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
-        adj = {
+        digit_map = {
+            '1': '',
             '2': 'abc',
             '3': 'def',
             '4': 'ghi',
@@ -9,20 +10,22 @@ class Solution:
             '7': 'pqrs',
             '8': 'tuv',
             '9': 'wxyz',
+            '0': '',
         }
-        if not digits: return []
-        N = len(digits)
+        if not digits: return ''
         res = []
-        def dfs(temp, i):
-            if len(temp) == N:
-                res.append(temp[:])
+        N = len(digits)
+        def backtrack(i, combos):
+            if i == N:
+                res.append(''.join(combos))
                 return
-            for char in adj[digits[i]]:
-                dfs(temp + char, i + 1)
-        dfs('', 0)
+            for char in digit_map[digits[i]]:
+                combos.append(char)
+                backtrack(i + 1, combos)
+                combos.pop()
+        backtrack(0, [])
         return res
 
 """
-backtracking
 
 """
