@@ -9,13 +9,20 @@ class Solution:
         if not preorder or not inorder: return None
         root = TreeNode(preorder[0])
         mid = inorder.index(preorder[0])
-        root.left = self.buildTree(preorder[1:mid + 1], inorder[:mid])
-        root.right = self.buildTree(preorder[mid + 1:], inorder[mid + 1:])
+        root.left = self.buildTree(preorder[1:mid+1], inorder[:mid])
+        root.right = self.buildTree(preorder[mid+1:], inorder[mid+1:])
         return root
+
+
 """
 preorder = [3,9,20,15,7]
 inorder =  [9,3,15,20,7]
-root: 3
-left: 9
-right 15
+   3
+ 9   20
+15 7
+root = 3
+root.left = [9,] -> from inorder
+root.right = [20, 15, 7] -> from preorder
+
+
 """
