@@ -1,8 +1,7 @@
 class TrieNode:
     def __init__(self):
-        self.content = ''
         self.children = {}
-        self.is_file = False
+        self.content = ''
 
 class FileSystem:
 
@@ -10,36 +9,36 @@ class FileSystem:
         self.root = TrieNode()
 
     def ls(self, path: str) -> List[str]:
+        # if file, return file's name
+        # if directory, return files and directory names
+            # The answer should in lexicographic order.
         node = self.root
         paths = path.split('/')
-        for p in paths[1:]:
-            if p in node.children:
-                node = node.children[p]
-        if node.is_file:
+        for path in paths[1:]:
+            if path in node.children:
+                node = node.children[path]
+        if node.content:
             return [paths[-1]]
         return sorted(node.children.keys())
 
-
-    def createDir(self, path):
+    def createDire(self, path):
         node = self.root
         paths = path.split('/')
-        for p in paths[1:]:
-            if not p in node.children:
-                node.children[p] = TrieNode()
-            node = node.children[p]
+        for path in paths[1:]:
+            if not path in node.children:
+                node.children[path] = TrieNode()
+            node = node.children[path]
         return node
 
     def mkdir(self, path: str) -> None:
-        self.createDir(path=path)
-
+        self.createDire(path)
 
     def addContentToFile(self, filePath: str, content: str) -> None:
-        node = self.createDir(path=filePath)
+        node = self.createDire(filePath)
         node.content += content
-        node.is_file = True
 
     def readContentFromFile(self, filePath: str) -> str:
-        node = self.createDir(path=filePath)
+        node = self.createDire(filePath)
         return node.content
 
 
@@ -49,3 +48,17 @@ class FileSystem:
 # obj.mkdir(path)
 # obj.addContentToFile(filePath,content)
 # param_4 = obj.readContentFromFile(filePath)
+"""
+{
+    children: {
+        a: {
+            children: {
+                b: {
+                    children: {}
+                }
+            }
+        }
+    }
+    content: ''
+}
+"""
