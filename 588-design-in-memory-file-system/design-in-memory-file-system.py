@@ -4,41 +4,40 @@ class TrieNode:
         self.content = ''
 
 class FileSystem:
-
     def __init__(self):
-        self.root = TrieNode()
+        self.root = TrieNode()        
 
-    def ls(self, path: str) -> List[str]:
-        # if file, return file's name
-        # if directory, return files and directory names
-            # The answer should in lexicographic order.
+    def create_file_path(self, path):
         node = self.root
         paths = path.split('/')
-        for path in paths[1:]:
-            if path in node.children:
-                node = node.children[path]
+        for p in paths[1:]:
+            if p == '': continue
+            if not p in node.children:
+                node.children[p] = TrieNode()
+            node = node.children[p]
+        return node
+
+    def ls(self, path: str) -> List[str]:
+        node = self.root
+        paths = path.split('/')
+        for p in paths[1:]:
+            if p == '': continue
+            if not p in node.children:
+                return []
+            node = node.children[p]
         if node.content:
             return [paths[-1]]
         return sorted(node.children.keys())
 
-    def createDire(self, path):
-        node = self.root
-        paths = path.split('/')
-        for path in paths[1:]:
-            if not path in node.children:
-                node.children[path] = TrieNode()
-            node = node.children[path]
-        return node
-
     def mkdir(self, path: str) -> None:
-        self.createDire(path)
+        node = self.create_file_path(path)
 
     def addContentToFile(self, filePath: str, content: str) -> None:
-        node = self.createDire(filePath)
+        node = self.create_file_path(filePath)
         node.content += content
 
     def readContentFromFile(self, filePath: str) -> str:
-        node = self.createDire(filePath)
+        node = self.create_file_path(filePath)
         return node.content
 
 
@@ -49,16 +48,17 @@ class FileSystem:
 # obj.addContentToFile(filePath,content)
 # param_4 = obj.readContentFromFile(filePath)
 """
-{
-    children: {
-        a: {
-            children: {
-                b: {
-                    children: {}
-                }
-            }
-        }
-    }
-    content: ''
-}
+["FileSystem"
+"mkdir"
+"ls"
+"mkdir"
+"ls"
+"ls"
+"ls"
+"addContentToFile"
+"ls"
+"ls" / => ["dycete","m","w"]
+"ls" /dycete => ["dycete"]
+]
+
 """
