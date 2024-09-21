@@ -1,17 +1,12 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
         N = len(nums)
-        memo = {} # i: total
-        def dfs(i):
-            if i >= N: return 0
-            if i in memo: return memo[i]
-            # rob
-            res = dfs(i + 2) + nums[i]
-            # skip
-            res = max(res, dfs(i + 1))
-            memo[i] = res
-            return res
-        return dfs(0)
+        dp = collections.defaultdict(int) # i: total
+        for i in range(N):
+            rob = dp[i - 2] + nums[i]
+            skip = dp[i - 1]
+            dp[i] = max(rob, skip)
+        return dp[N - 1]
 
 """
 dp
