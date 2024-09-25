@@ -37,7 +37,8 @@ class Solution:
         }
         res = []
         def dfs(num):
-            if num == 0: return ''
+            if num == 0: 
+                return ''
             elif num <= 20:
                 res.append(hashmap[num])
             elif num < 100:
@@ -46,7 +47,6 @@ class Solution:
                 dfs(num % 10)
             elif num < 1000:
                 hundred = dfs(num // 100)
-                print(hundred, num // 100)
                 res.append(hundred)
                 res.append('Hundred')
                 dfs(num % 100)
