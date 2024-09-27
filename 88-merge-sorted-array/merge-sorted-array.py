@@ -3,19 +3,16 @@ class Solution:
         """
         Do not return anything, modify nums1 in-place instead.
         """
-        res = []
-        i, j = 0, 0
-        while i < m and j < n:
-            if nums1[i] <= nums2[j]:
-                res.append(nums1[i])
-                i += 1
+        last_idx = m + n - 1
+        m -= 1
+        n -= 1
+        while 0 <= m and 0 <= n:
+            if nums1[m] <= nums2[n]:
+                nums1[last_idx] = nums2[n]
+                n -= 1
             else:
-                res.append(nums2[j])
-                j += 1
-        while i < m:
-            res.append(nums1[i])
-            i += 1
-        while j < n:
-            res.append(nums2[j])
-            j += 1
-        nums1[:] = res[:]
+                nums1[last_idx] = nums1[m]
+                m -= 1
+            last_idx -= 1
+        if n >= 0:
+            nums1[:n + 1] = nums2[:n + 1]
