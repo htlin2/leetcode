@@ -6,8 +6,22 @@ class Solution:
             adj[src].append(dst)
         res = []
         def dfs(src):
-            while adj[src]:
-                dfs(adj[src].pop())
+            stack = adj[src]
+            while stack:
+                nei = stack.pop()
+                dfs(nei)
             res.append(src)
         dfs('JFK')
         return res[::-1]
+
+"""
+INPUT
+[["JFK","KUL"],["JFK","NRT"],["NRT","JFK"]]
+OUTPUT
+["JFK","NRT","JFK","KUL"]
+
+JFK: KUL, NRT
+NRT: JFK
+
+JFK -> KUL -> stop
+"""
