@@ -3,10 +3,12 @@ class Solution:
         N = len(nums)
         sorted_nums = sorted(nums)
         left, right = 0, N - 1
-        while left <= right and nums[left] == sorted_nums[left]:
+        while left < right and nums[left] == sorted_nums[left]:
             left += 1
-        while left <= right and nums[right] == sorted_nums[right]:
+        while left < right and nums[right] == sorted_nums[right]:
             right -= 1
+        if left == right:
+            return 0
         return right - left + 1
 """
 Input: nums = [2,6,4,8,10,9,15]
