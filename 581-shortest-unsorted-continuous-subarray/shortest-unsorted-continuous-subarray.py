@@ -1,15 +1,20 @@
 class Solution:
     def findUnsortedSubarray(self, nums: List[int]) -> int:
         N = len(nums)
-        sorted_nums = sorted(nums)
-        left, right = 0, N - 1
-        while left < right and nums[left] == sorted_nums[left]:
-            left += 1
-        while left < right and nums[right] == sorted_nums[right]:
-            right -= 1
-        if left == right:
-            return 0
-        return right - left + 1
+        left, right = N - 1, 0
+        stack = [] # monotonic increasing
+        for i in range(N):
+            while stack and nums[stack[-1]] > nums[i]:
+                left = min(left, stack.pop())
+            stack.append(i)
+        stack = []
+        for i in range(N - 1, -1, -1):
+            while stack and nums[stack[-1]] < nums[i]:
+                right = max(right, stack.pop())
+            stack.append(i)
+        if right > left:
+            return right - left + 1
+        return 0
 """
 Input: nums = [2,6,4,8,10,9,15]
 Output: 5
