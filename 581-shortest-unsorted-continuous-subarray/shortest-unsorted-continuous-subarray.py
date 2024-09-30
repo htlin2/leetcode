@@ -7,7 +7,7 @@ class Solution:
             while stack and nums[stack[-1]] > nums[i]:
                 left = min(left, stack.pop())
             stack.append(i)
-        stack = []
+        stack = [] # monotonic decreasing
         for i in range(N - 1, -1, -1):
             while stack and nums[stack[-1]] < nums[i]:
                 right = max(right, stack.pop())
