@@ -1,17 +1,15 @@
-import bisect
-
 class Solution:
     def targetIndices(self, nums: List[int], target: int) -> List[int]:
-        nums.sort()
-        res = []
-        for i, n in enumerate(nums):
+        count_less = 0
+        count_target = 0
+        for n in nums:
             if n == target:
-                res.append(i)
-        return res
+                count_target += 1
+            elif n < target:
+                count_less += 1
+        return [i + count_less for i in range(count_target)]
 """
-Brute Force + sort
-loop from beginning to find left idx
-loop from end to find right idx
-Time: O(n log n)
-Space: O(n)
+Optimized Counting
+Time: O(n)
+Space: O(1) if ignore space for output
 """
