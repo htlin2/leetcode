@@ -1,19 +1,20 @@
 class Solution:
     def decodeString(self, s: str) -> str:
-        stack = [] # (substr, digits)
-        substr, digits = '', 0
+        stack = []
+        substr, digits = '', ''
         for char in s:
-            if char.isdigit():
-                digits = digits * 10 + int(char)
-            elif char.isalpha():
-                substr += char
-            elif char == '[':
-                stack.append((substr, digits))
-                substr, digits = '', 0
-            elif char == ']':
-                s_substr, s_digits = stack.pop()
-                substr = s_substr + s_digits * substr
-        return substr
+            if char == ']':
+                while stack and stack[-1] != '[':
+                    substr = stack.pop() + substr
+                stack.pop() # pop [
+                while stack and stack[-1].isdigit():
+                    digits = stack.pop() + digits
+                stack.append(int(digits) * substr)
+                substr, digits = '', ''
+            else:
+                stack.append(char)
+        stack.append(substr)
+        return ''.join(stack)
 
 """
 Input: s = "3[a]2[bc]"
