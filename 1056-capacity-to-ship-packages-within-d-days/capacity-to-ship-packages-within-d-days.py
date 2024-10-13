@@ -7,11 +7,9 @@ class Solution:
             for n in nums:
                 if curr_weight + n > mid:
                     total_days += 1
-                    curr_weight = n
-                else:
-                    curr_weight += n
-            if curr_weight:
-                total_days += 1
+                    curr_weight = 0
+                curr_weight += n
+            total_days += 1 if curr_weight else 0
             if total_days == days:
                 right = mid - 1
             elif total_days < days:
