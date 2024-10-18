@@ -1,8 +1,7 @@
 class Solution:
-    def numberToWords(self, num: int) -> str:
-        if not num: return 'Zero'
-        hashmap = {
-            0: "Zero",
+    def __init__(self):
+        self.hashmap = {
+            0: "",
             1: "One",
             2: "Two",
             3: "Three",
@@ -33,39 +32,52 @@ class Solution:
             100: "Hundred",
             1000: "Thousand",
             1000000: "Million",
-            1000000000: "Billion",
+            1000000000: "Billion"
         }
-        res = []
+    def numberToWords(self, num: int) -> str:
+        if not num: return 'Zero'
         def dfs(num):
-            if num == 0: 
-                return ''
-            elif num <= 20:
-                res.append(hashmap[num])
+            if num <= 20:
+                return self.hashmap[num]
             elif num < 100:
-                tenth = hashmap[num // 10 * 10]
+                res = []
+                tenth = self.hashmap[num // 10 * 10] # 95 // 10 -> 9
                 res.append(tenth)
-                dfs(num % 10)
+                rem = dfs(num % 10) # 95 % 10 -> 5
+                if rem:
+                    res.append(rem)
+                return ' '.join(res)
             elif num < 1000:
-                hundred = dfs(num // 100)
-                res.append(hundred)
+                res = [] # 932
+                res.append(dfs(num // 100))
                 res.append('Hundred')
-                dfs(num % 100)
+                rem = dfs(num % 100) # 32 -> Thirty Two
+                if rem:
+                    res.append(rem)
+                return ' '.join(res)
             elif num < 1000000:
+                res = [] # 1234
                 thousand = dfs(num // 1000)
                 res.append(thousand)
                 res.append('Thousand')
-                dfs(num % 1000) 
+                rem = dfs(num % 1000) # 234 -> Two hundred thirty Four
+                if rem:
+                    res.append(rem)
+                return ' '.join(res)
             elif num < 1000000000:
-                million = dfs(num // 1000000)
-                res.append(million)
+                res = []
+                res.append(dfs(num // 1000000))
                 res.append('Million')
-                dfs(num % 1000000)
+                rem = dfs(num % 1000000)
+                if rem:
+                    res.append(rem)
+                return ' '.join(res)
             else:
-                billion = dfs(num // 1000000000)
-                res.append(billion)
+                res = []
+                res.append(dfs(num // 1000000000))
                 res.append('Billion')
-                dfs(num % 1000000000)
-        dfs(num)
-        res = [r for r in res if r]
-        return ' '.join(res)
-                
+                rem = dfs(num % 1000000000)
+                if rem:
+                    res.append(rem)
+                return ' '.join(res)
+        return dfs(num)
