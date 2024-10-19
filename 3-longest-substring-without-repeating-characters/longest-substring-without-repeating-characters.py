@@ -1,9 +1,9 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
-        window = set()
         N = len(s)
-        left = 0
         res = 0
+        left = 0
+        window = set()
         for right in range(N):
             while s[right] in window:
                 window.remove(s[left])
@@ -12,10 +12,10 @@ class Solution:
             res = max(res, len(window))
         return res
 """
-sliding window
+sliding window variable
 Input: s = "abcabcbb"
-Output: 3
-window = abc
+Output: 3 -> abc
+window = cab
  a b c a b c b b
-   l   r
+     l   r
 """
