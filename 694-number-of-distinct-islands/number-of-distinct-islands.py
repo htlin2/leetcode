@@ -1,23 +1,34 @@
 class Solution:
     def numDistinctIslands(self, grid: List[List[int]]) -> int:
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
         ROW, COL = len(grid), len(grid[0])
-        res = set() # tuple(temp)
-        def dfs(r, c, base_r, base_c, temp):
-            if r < 0 or c < 0 or r >= ROW or c >= COL: return 
-            if grid[r][c] == 0: return 
-            temp.append((r - base_r, c - base_c))
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        res = set() # islands tuples
+        def dfs(r, c, org_r, org_c, islands):
+            if r < 0 or c < 0 or r >= ROW or c >= COL:
+                return
+            if grid[r][c] == 0:
+                return
             grid[r][c] = 0
+            islands.append((r - org_r, c - org_c))
             for dr, dc in directions:
-                dfs(dr + r, dc + c, base_r, base_c, temp)
+                dfs(r + dr, c + dc, org_r, org_c, islands)
         for r in range(ROW):
             for c in range(COL):
-                temp = []
-                if grid[r][c]:
-                    dfs(r, c, r, c, temp)
-                    res.add(tuple(temp))
+                islands = []
+                if grid[r][c] == 1:
+                    dfs(r, c, r, c, islands)
+                    res.add(tuple(islands))
         return len(res)
 """
-how to know if islands are identical?
-
+DFS + regonize islands that are duplicates
+Input: grid = [
+    [1,1,0,0,0],
+    [1,1,0,0,0],
+    [0,0,0,1,1],
+    [0,0,0,1,1]
+]
+Output: 1
+dfs(r, c, org_r, org_c):
+    islands.append((r - org_r, c - org_c))
+    tuple(islands) and store in result(set)
 """
