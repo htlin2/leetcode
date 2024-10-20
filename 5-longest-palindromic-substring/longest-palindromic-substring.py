@@ -1,31 +1,36 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        def getPalindrome(l, r):
-            while l >= 0 and r < len(s) and s[l] == s[r]:
-                l -= 1
-                r += 1
-            return s[l + 1:r]
+        N = len(s)
         res = ''
-        for i in range(0, len(s)):
-            # get odd
-            odd = getPalindrome(i, i)
-            # get even
-            even = getPalindrome(i, i + 1)
-            if len(res) < len(odd):
+        def get_palindrome(left, right):
+            if s[left] != s[right]: return ''
+            while 0 <= left and right < N and s[left] == s[right]:
+                left -= 1
+                right += 1
+            return s[left + 1: right]
+        for i in range(N):
+            odd = get_palindrome(i, i)
+            even = get_palindrome(i, i + 1) if i + 1 < N else ''
+            if len(odd) > len(res):
                 res = odd
-            if len(res) < len(even):
+            if len(even) > len(res):
                 res = even
         return res
-
-
 """
-sliding window + hashmap
-babad
-bab
+dp - odd even
+Input: s = "babad"
+Output: "bab"
+Explanation: "aba" is also a valid answer.
+ b a b a d
+odd = b -> o
+even  ba -> x
+     aba -> o
+    babad -> x
 
 
-brute force
-ans = bab
-time: n * (n + n) > n^2
-space: n
+
+babab
+
+
+
 """
