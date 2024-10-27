@@ -2,11 +2,11 @@ class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         res = []
         for num in nums:
-            i = bisect.bisect_left(res, num)
-            if i == len(res):
+            if not res or num > res[-1]:
                 res.append(num)
-            else:
-                res[i] = num
+                continue
+            i = bisect.bisect_left(res, num)
+            res[i] = num
         return len(res)
 """
 Binary Search
