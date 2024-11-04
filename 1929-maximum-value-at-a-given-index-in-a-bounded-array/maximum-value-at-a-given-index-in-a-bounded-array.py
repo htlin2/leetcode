@@ -7,15 +7,15 @@ class Solution:
             total = 0
             
             # Can fit sequence on left side
-            if index + 1 > mid:
-                total += (mid) * (mid + 1) // 2
+            if mid <= index:
+                total += mid * (mid + 1) // 2
                 left_of_sequence = index - mid
                 total += left_of_sequence + 1
             # Can't fit sequence on left side
             else:
-                total += (mid) * (mid + 1) // 2
-                left_of_sequence = mid - (index + 1)
-                total -= (left_of_sequence) * (left_of_sequence + 1) // 2
+                total += mid * (mid + 1) // 2
+                left_of_sequence = mid - index - 1
+                total -= left_of_sequence * (left_of_sequence + 1) // 2
             
             end = n - 1
             # Can fit sequence on right side
