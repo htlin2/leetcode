@@ -30,7 +30,6 @@ class Solution:
                 left = mid + 1
             else:
                 right = mid - 1
-        print(right)
         return right if right >= 0 else max(right, 1)
 """
 index = 3
