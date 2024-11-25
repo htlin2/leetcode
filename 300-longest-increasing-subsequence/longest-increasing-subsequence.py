@@ -1,14 +1,10 @@
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
         res = []
-        for num in nums:
-            if not res or num > res[-1]:
-                res.append(num)
+        for i in range(len(nums)):
+            if not res or nums[i] > res[-1]:
+                res.append(nums[i])
                 continue
-            i = bisect.bisect_left(res, num)
-            res[i] = num
+            idx = bisect.bisect_left(res, nums[i])
+            res[idx] = nums[i]
         return len(res)
-"""
-Binary Search
-
-"""
