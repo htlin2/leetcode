@@ -3,7 +3,8 @@ class Solution:
         adj = collections.defaultdict(list)
         for a, b in prerequisites:
             adj[b].append(a)
-        visited, cycle = [], set()
+        res, visited = [], set()
+        cycle = set()
         def dfs(node):
             if node in cycle:
                 return False
@@ -13,7 +14,8 @@ class Solution:
             for nei in adj[node]:
                 if not dfs(nei):
                     return False
-            visited.append(node)
+            visited.add(node)
+            res.append(node)
             cycle.remove(node)
             return True
         for node in range(N):
@@ -21,7 +23,7 @@ class Solution:
                 continue
             if not dfs(node):
                 return []
-        return [] if len(visited) != N else visited[::-1]
+        return [] if len(res) != N else res[::-1]
 """
 graph
 """
