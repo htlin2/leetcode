@@ -3,24 +3,22 @@ class Solution:
         """
         Do not return anything, modify nums in-place instead.
         """
-        def partition(start, end):
-            pivot = nums[end]
-            left = start
-            for right in range(start, end):
-                if nums[right] >= pivot:
-                    continue
-                nums[left], nums[right] = nums[right], nums[left]
-                left += 1
-            nums[left], nums[end] = nums[end], nums[left]
-            return left
-
-        def qs(start, end):
-            if start < end:
-                pi = partition(start, end)
-                qs(start, pi - 1)
-                qs(pi + 1, end)
-        qs(0, len(nums) - 1)
-
-"""
-quick sort find pivot
-"""
+        def split(nums):
+            if len(nums) <= 1: return nums
+            mid = (0 + len(nums) - 1) // 2
+            A = split(nums[:mid + 1])
+            B = split(nums[mid + 1:])
+            return merge(A, B)
+        def merge(A, B):
+            i, j = 0, 0
+            res = []
+            while i < len(A) and j < len(B):
+                if A[i] <= B[j]:
+                    res.append(A[i])
+                    i += 1
+                else:
+                    res.append(B[j])
+                    j += 1
+            res += A[i:] + B[j:]
+            return res
+        nums[:] = split(nums)
