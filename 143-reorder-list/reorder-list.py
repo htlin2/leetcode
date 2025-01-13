@@ -8,50 +8,43 @@ class Solution:
         """
         Do not return anything, modify head in-place instead.
         """
-        slow = fast = head
-        fast = fast.next
+        dummy = ListNode(-1)
+        dummy.next = head
+        slow, fast = dummy, dummy
         while fast and fast.next:
             slow = slow.next
             fast = fast.next.next
-        B = slow.next
-        slow.next = None
-        # reverse B
-        prev = None
-        while B:
-            temp = B.next
-            B.next = prev
-            prev = B
-            B = temp
-        B = prev
+        mid = slow
         A = head
-        # merge A and B
+        B = mid.next
+        mid.next = None
+        # reverse B
+        prev, curr = None, B
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        B = prev
         dummy = curr = ListNode(-1)
         while A and B:
             curr.next = A
+            curr = curr.next
             A = A.next
-            curr = curr.next
-
             curr.next = B
+            curr = curr.next
             B = B.next
-            curr = curr.next
-        if A:
-            curr.next = A
-        if B:
-            curr.next = B
+        curr.next = A
         return dummy.next
 """
-Input: head = [1,2,3,4,5]
-Output: [1,5,2,4,3]
+find middle
+reverse linkedlist
+build list with reversed and normal
 
-odd, s stops at 2
- d  1  2  3  4  5
- s sf  s  f     f
-even,  2
- d  1  2  3  4
- s sf  s  f    f
-A = 1 2 3
-B = 4 5
-reverse(B)
-B = 5 4 3
+Input: head = [1,2,3,4]
+  [ 1, 2, 3, 4]
+sf sf sf  f  f
 
+  [ 1, 2, 3, 4, 5]
+sf sf sf sf  f  f 
 """
