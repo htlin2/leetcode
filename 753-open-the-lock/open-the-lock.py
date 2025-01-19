@@ -3,10 +3,12 @@ class Solution:
         def get_nei(num):
             res = []
             for i in range(4):
-                digit = (int(num[i]) + 1) % 10
-                res.append(num[:i] + str(digit) + num[i+1:])
-                digit = (int(num[i]) - 1 + 10) % 10
-                res.append(num[:i] + str(digit) + num[i+1:])
+                num_list_plus = list(num)
+                num_list_plus[i] = str((int(num_list_plus[i]) + 1) % 10)
+                res.append(''.join(num_list_plus))
+                num_list_minus = list(num)
+                num_list_minus[i] = str((int(num_list_minus[i]) - 1 + 10) % 10)
+                res.append(''.join(num_list_minus))
             return res
         if "0000" in deadends:
             return -1
