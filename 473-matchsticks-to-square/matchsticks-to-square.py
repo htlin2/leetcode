@@ -1,7 +1,8 @@
 class Solution:
     def makesquare(self, nums: List[int]) -> bool:
-        length = sum(nums) // 4
-        if length * 4 != sum(nums): return False
+        total = sum(nums)
+        length = total // 4
+        if length * 4 != total: return False
         nums.sort(reverse=True)
         sides = [0] * 4
         def backtrack(i):
