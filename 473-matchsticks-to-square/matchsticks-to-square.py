@@ -1,17 +1,20 @@
 class Solution:
     def makesquare(self, nums: List[int]) -> bool:
         total = sum(nums)
-        length = total // 4
-        if length * 4 != total: return False
-        nums.sort(reverse=True)
-        sides = [0] * 4
-        def backtrack(i):
-            if i == len(nums): return True
-            for j in range(4):
-                if sides[j] + nums[i] <= length:
-                    sides[j] += nums[i]
-                    if backtrack(i + 1):
+        if total % 4 != 0: return False
+        target = total // 4
+        visited = set()
+        def bt(i, rem, curr_sum):
+            if rem == 0: return True
+            if curr_sum == target:
+                return bt(0, rem - 1, 0)
+            for j in range(i, len(nums)):
+                if j not in visited and curr_sum + nums[j] <= target:
+                    visited.add(j)
+                    if bt(j + 1, rem, curr_sum + nums[j]):
                         return True
-                    sides[j] -= nums[i]
+                    visited.remove(j)
+                    if curr_sum == 0:
+                        break
             return False
-        return backtrack(0)
+        return bt(0, 4, 0)
