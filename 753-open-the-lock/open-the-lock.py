@@ -1,31 +1,28 @@
 class Solution:
     def openLock(self, deadends: List[str], target: str) -> int:
-        visited = set(deadends)
-        if target in visited or "0000" in visited: return -1
-        def get_nei(nums):
+        def get_locks(lock):
             res = []
-            for i in range(len(nums)):
-                digit = (int(nums[i]) + 1) % 10
-                res.append(nums[:i] + str(digit) + nums[i + 1:])
-                digit = (int(nums[i]) - 1) % 10
-                res.append(nums[:i] + str(digit) + nums[i + 1:])
+            for i in range(4):
+                digit = int(lock[i])
+                plus = lock[:i] + str((digit + 1) % 10) + lock[i+1:]
+                minus = lock[:i] + str((digit - 1) % 10) + lock[i+1:]
+                res.append(plus)
+                res.append(minus)
             return res
-        q = collections.deque([(0, "0000")]) # (count, combo)
-        while q:
-            count, combo = q.popleft()
-            if combo == target: return count
-            for nei in get_nei(combo):
+        visited = set(deadends)
+        if target in visited or '0000' in visited: return -1
+        visited.add('0000')
+        min_heap = [(0, '0000')]
+        while min_heap:
+            count, lock = heapq.heappop(min_heap)
+            if lock == target: return count
+            for nei in get_locks(lock):
                 if nei in visited: continue
                 visited.add(nei)
-                q.append((count + 1, nei))
+                heapq.heappush(min_heap, (count + 1, nei))
         return -1
-"""
-shortest path prim's algo (min_heap)
-Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
-Output: 6
 
-visited = ["0201","0101","0102","1212","2002", "0000", "0009"]
-heap = [(1, 0001), (1, 0009), (1, 0010), (1, 0100), (1, 1000)]
-Time: E * log(v)
-Space: E + V
+"""
+bfs - shortest path - prim's algorithm or districs?
+
 """
