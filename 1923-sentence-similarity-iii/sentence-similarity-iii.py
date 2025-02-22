@@ -11,13 +11,13 @@ class Solution:
         while w1_right >= 0 and w2_right >= 0 and w1[w1_right] == w2[w2_right]:
             w1_right -= 1
             w2_right -= 1
-        return w2_right < w1_left
+        return w2_left > w2_right
 """
 two pointers
 Input: sentence1 = "My name is Haley", sentence2 = "My Haley"
 w1 = [My, name, is, Haley]
-          w1_l  w2_r
+          l1  r1
 w2 = [My, Haley]
-      w2_r  w2_l
+      l2  r2
 
 """
