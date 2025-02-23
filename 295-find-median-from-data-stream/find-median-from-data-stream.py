@@ -1,30 +1,31 @@
 class MedianFinder:
 
     def __init__(self):
-        self.left = [] # max_heap
-        self.right = [] # min_heap
+        self.max_heap = [] # left
+        self.min_heap = [] # right
 
     def addNum(self, num: int) -> None:
-        if self.left and num <= -self.left[0]:
-            heapq.heappush(self.left, -num)
+        max_heap, min_heap = self.max_heap, self.min_heap
+        if max_heap and -max_heap[0] >= num:
+            heapq.heappush(max_heap, -num)
         else:
-            heapq.heappush(self.right, num)
-        if len(self.left) - len(self.right) >= 2:
-            left_val = heapq.heappop(self.left)
-            heapq.heappush(self.right, -left_val)
-        if len(self.right) - len(self.left) >= 2:
-            right_val = heapq.heappop(self.right)
-            heapq.heappush(self.left, -right_val)
-        # Time: O(log n)
-        # Space: O(n
+            heapq.heappush(min_heap, num)
+        
+        while len(max_heap) < len(min_heap): #left < right
+            first = heapq.heappop(min_heap)
+            heapq.heappush(max_heap, -first)
+        while len(max_heap) - 1 > len(min_heap): # left - 1 > right
+            first = -heapq.heappop(max_heap)
+            heapq.heappush(min_heap, first)
 
     def findMedian(self) -> float:
-        is_even = len(self.left) == len(self.right)
+        N1, N2 = len(self.max_heap), len(self.min_heap)
+        is_even = (N1 + N2) % 2 == 0
+        left = -self.max_heap[0] if N1 else 0
+        right = self.min_heap[0] if N2 else 0
         if is_even:
-            return (-self.left[0] + self.right[0]) / 2
-        return float(-self.left[0]) if len(self.left) > len(self.right) else float(self.right[0])
-        # Time: O(1)
-        # Space: O(1)
+            return (left + right) / 2
+        return left
 
 
 # Your MedianFinder object will be instantiated and called as such:
