@@ -2,7 +2,6 @@ class Solution:
     def makesquare(self, nums: List[int]) -> bool:
         total = sum(nums)
         if total % 4 != 0: return False
-        print(total % 4)
         target = total // 4
         visited = set()
         nums.sort(reverse=True)
