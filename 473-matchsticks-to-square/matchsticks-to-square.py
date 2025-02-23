@@ -14,7 +14,7 @@ class Solution:
                 visited.add(j)
                 if bt(j + 1, curr_sum + nums[j], rem_side): return True
                 visited.remove(j)
-                if curr_sum == 0: break
+                # if curr_sum == 0: break
             return False
         return bt(0, 0, 4)
 """
