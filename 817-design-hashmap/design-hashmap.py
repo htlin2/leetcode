@@ -1,17 +1,17 @@
 class MyHashMap:
 
     def __init__(self):
-        self.hashmap = {}
+        self.bucket = [None] * (10 ** 6 + 1)
 
     def put(self, key: int, value: int) -> None:
-        self.hashmap[key] = value
+        self.bucket[key] = value
 
     def get(self, key: int) -> int:
-        return self.hashmap.get(key, -1)
+        value = self.bucket[key]
+        return -1 if value == None else value
 
     def remove(self, key: int) -> None:
-        if self.get(key) != -1:
-            del self.hashmap[key]
+        self.bucket[key] = None
 
 
 # Your MyHashMap object will be instantiated and called as such:
