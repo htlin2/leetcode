@@ -2,7 +2,7 @@ class Solution:
     def numberToWords(self, num: int) -> str:
         if num == 0: return "Zero"
         hashmap = {
-            0: "Zero",
+            0: "",
             1: "One",
             2: "Two",
             3: "Three",
@@ -37,9 +37,7 @@ class Solution:
         }
         res = []
         def dfs(num):
-            if num == 0:
-                return ''
-            elif num in hashmap:
+            if num in hashmap:
                 res.append(hashmap[num])
             elif num < 100:
                 res.append(dfs(num // 10 * 10))
