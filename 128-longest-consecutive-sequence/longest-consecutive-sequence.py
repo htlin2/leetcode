@@ -4,10 +4,10 @@ class Solution:
         res = 0
         for n in nums:
             if hashmap[n] != 0: continue
-            prev_num = n - 1
-            next_num = n + 1
-            hashmap[n] = hashmap[prev_num] + hashmap[next_num] + 1
-            hashmap[n - hashmap[prev_num]] = hashmap[n]
-            hashmap[n + hashmap[next_num]] = hashmap[n]
+            prev_val = hashmap[n - 1]
+            next_val = hashmap[n + 1]
+            hashmap[n] = prev_val + next_val + 1
+            hashmap[n - prev_val] = hashmap[n]
+            hashmap[n + next_val] = hashmap[n]
             res = max(res, hashmap[n])
         return res
