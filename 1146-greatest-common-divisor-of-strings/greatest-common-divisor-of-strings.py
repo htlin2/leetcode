@@ -1,13 +1,18 @@
 class Solution:
     def gcdOfStrings(self, str1: str, str2: str) -> str:
-        n1, n2 = len(str1), len(str2)
-        for i in range(min(n1, n2), 0, -1):
-            if n1 % i or n2 % i:
-                continue
-            m1, m2 = n1 // i, n2 // i
-            if m1 * str1[:i] == str1 and m2 * str1[:i] == str2:
-                return str1[:i]
-        return ''
+        def dfs(begin, end):
+            if begin > end: return ''
+            curr = str2[begin: end + 1]
+            m1 = len(str2) // len(curr)
+            m2 = len(str1) // len(curr)
+            if (str2 == curr * m1) and (str1 == curr * m2):
+                return curr
+            return dfs(begin, end - 1)
+        return dfs(0, len(str2) - 1)
+            
 """
-greedy + math
+recurrsion
+Input: str1 = "ABCABC", str2 = "ABC"
+Output: "ABC"
+q = [ABCABC]
 """
