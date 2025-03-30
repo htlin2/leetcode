@@ -1,16 +1,19 @@
 class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
-        min_heap = [] # (num, (r, c))
-        for i in range(len(grid[0])):
-            heapq.heappush(min_heap, (grid[0][i], (0, i)))
+        left, right = grid[0][0], grid[-1][-1]
+        def less_than_mid_counts(mid):
+            count = 0
+            for row in grid:
+                count += bisect.bisect_right(row, mid)
+            return count
 
-        for _ in range(k - 1):
-            _num, (r, c) = heapq.heappop(min_heap)
-            if r + 1 < len(grid):
-                num = grid[r + 1][c]
-                to_add = (num, (r + 1, c))
-                heapq.heappush(min_heap, to_add)
-        return min_heap[0][0]
+        while left <= right:
+            mid = (left + right) // 2
+            if less_than_mid_counts(mid) < k:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return left
 """
 heap + queue
 k = 8
