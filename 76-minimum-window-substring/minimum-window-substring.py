@@ -1,38 +1,32 @@
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
-        def is_match(s_counter, t_counter):
-            if len(s_counter.keys()) != len(t_counter.keys()):
-                return False
-            for key in s_counter.keys():
-                if s_counter[key] < t_counter[key]:
-                    return False
+        if len(s) < len(t): return ''
+        def is_valid(window, counter):
+            if len(window) != len(counter): return False
+            for key in window.keys():
+                if window[key] < counter[key]: return False
             return True
-        if len(s) < len(t):
-            return ''
-        res = ''
-        t_counter = collections.Counter(t)
-        s_counter = {}
+        counter = collections.Counter(t)
+        window = collections.defaultdict(int)
         left = 0
+        res = ''
         for right in range(len(s)):
-            char = s[right]
-            if char in t_counter:
-                s_counter[char] = s_counter.get(char, 0) + 1
-            while is_match(s_counter, t_counter):
-                if not res or right - left + 1 < len(res):
-                    res = s[left: right+1]
-                s_char = s[left]
-                if s_char in s_counter:
-                    s_counter[s_char] -= 1
-                    if s_counter[s_char] == 0:
-                        del s_counter[s_char]
+            if s[right] in counter:
+                window[s[right]] += 1
+            while is_valid(window, counter):
+                if not res or len(res) >= (right - left + 1):
+                    res = s[left:right + 1]
+                if s[left] in window:
+                    window[s[left]] -= 1
+                if window[s[left]] == 0:
+                    del window[s[left]]
                 left += 1
         return res
 """
+sliding window variable
 Input: s = "ADOBECODEBANC", t = "ABC"
 Output: "BANC"
-t_counter = {A: 1, B: 1, C: 1}
-s_counter = {A: 1, B: 2, C: 1}
-s = "ADOBECODEBANC"
-      L       R
-window = ADOBEC
+window = {A: 1, B: 1, C: 1}
+ADOBECODEBANC
+L    R
 """
