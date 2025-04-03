@@ -1,23 +1,40 @@
 class Solution:
     def areSentencesSimilar(self, s1: str, s2: str) -> bool:
-        if len(s1) < len(s2):
-            s1, s2 = s2, s1
-        w1, w2 = s1.split(' '), s2.split(' ')
-        w1_left, w2_left = 0, 0
-        while w1_left < len(w1) and w2_left < len(w2) and w1[w1_left] == w2[w2_left]:
-            w1_left += 1
-            w2_left += 1
-        w1_right, w2_right = len(w1) - 1, len(w2) - 1
-        while w1_right >= 0 and w2_right >= 0 and w1[w1_right] == w2[w2_right]:
-            w1_right -= 1
-            w2_right -= 1
-        return w2_left > w2_right
+        s1_s = s1.split(' ')
+        s2_s = s2.split(' ')
+        if len(s1) < len(s2): return self.areSentencesSimilar(s2, s1)
+        s1 = s1_s
+        s2 = s2_s
+        n1, n2 = len(s1), len(s2)
+        s1_l, s1_r = 0, n1 - 1
+        s2_l, s2_r = 0, n2 - 1
+        while s2_l <= s2_r and s1[s1_l] == s2[s2_l]:
+            s1_l += 1
+            s2_l += 1
+        while 0 <= s2_r and s1[s1_r] == s2[s2_r]:
+            s1_r -= 1
+            s2_r -= 1
+        if s2_r < s2_l:
+            return True
+        return False
 """
 two pointers
 Input: sentence1 = "My name is Haley", sentence2 = "My Haley"
-w1 = [My, name, is, Haley]
-          l1  r1
-w2 = [My, Haley]
-      l2  r2
+
+s1 = My, name, is, Haley
+     l               r
+s2 = My, Haley
+     l    r
+
+
+Input: sentence1 = "Eating right now", sentence2 = "Eating"
+s1 = Eating, right, now
+      l              r
+s2 = Eating
+       lr
+
+s1 = Lucccky
+
+s2 = Luky
 
 """
