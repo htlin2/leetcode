@@ -1,14 +1,20 @@
 class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
-        min_heap = [] #(v, r, c)
-        for c in range(len(grid[0])):
-            heapq.heappush(min_heap, (grid[0][c], 0, c))
-        while k - 1:
-            k -= 1
-            _, r, c = heapq.heappop(min_heap)
-            if r + 1 < len(grid[0]):
-                heapq.heappush(min_heap, (grid[r + 1][c], r + 1, c))
-        return min_heap[0][0]
+        left, right = grid[0][0], grid[-1][-1]
+        def get_k(mid):
+            maybe_k = 0
+            for row in grid:
+                maybe_k += bisect.bisect_right(row, mid)
+            return maybe_k
+
+        while left <= right:
+            mid = (left + right) // 2
+            maybe_k = get_k(mid)
+            if maybe_k < k:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return left
 """
 k = 8
 Input: matrix = [
