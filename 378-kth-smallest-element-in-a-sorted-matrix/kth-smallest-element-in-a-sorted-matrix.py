@@ -1,21 +1,26 @@
 class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
-        left, right = grid[0][0], grid[-1][-1]
-        def less_than_mid_counts(mid):
-            count = 0
-            r, c = len(grid) - 1, 0
-            while r >= 0 and c < len(grid[0]):
-                if grid[r][c] <= mid:
-                    count += r + 1
-                    c += 1
-                else:
-                    r -= 1
-            return count
+        min_heap = [] #(v, r, c)
+        for c in range(len(grid[0])):
+            heapq.heappush(min_heap, (grid[0][c], 0, c))
+        while k - 1:
+            k -= 1
+            _, r, c = heapq.heappop(min_heap)
+            if r + 1 < len(grid[0]):
+                heapq.heappush(min_heap, (grid[r + 1][c], r + 1, c))
+        return min_heap[0][0]
+"""
+k = 8
+Input: matrix = [
+    [ 1, 5, 9],
+    [10,11,13],
+    [12,13,15],
+]
+1. binary search + bisect weight right
+left = 1, right = 15
+Time: O(n log n + log m)
+Space:
 
-        while left <= right:
-            mid = (left + right) // 2
-            if less_than_mid_counts(mid) < k:
-                left = mid + 1
-            else:
-                right = mid - 1
-        return left
+2. binary search + for loop
+O(n log n + log m)
+"""
