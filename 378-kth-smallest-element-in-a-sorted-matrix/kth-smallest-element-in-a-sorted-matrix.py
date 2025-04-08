@@ -2,10 +2,15 @@ class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
         left, right = grid[0][0], grid[-1][-1]
         def get_k(mid):
-            maybe_k = 0
-            for row in grid:
-                maybe_k += bisect.bisect_right(row, mid)
-            return maybe_k
+            counts = 0
+            row, col = len(grid) - 1, 0
+            while row >= 0 and col < len(grid[0]):
+                if grid[row][col] <= mid:
+                    counts += row + 1
+                    col += 1
+                else:
+                    row -= 1
+            return counts
 
         while left <= right:
             mid = (left + right) // 2
