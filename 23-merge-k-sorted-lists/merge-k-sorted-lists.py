@@ -27,5 +27,6 @@ class Solution:
         for i in range(0, len(lists), 2):
             A = lists[i]
             B = lists[i + 1] if i + 1 < len(lists) else None
-            res.append(self.merge(A, B))
+            merged = self.merge(A, B)
+            res.append(merged)
         return self.mergeKLists(res)
