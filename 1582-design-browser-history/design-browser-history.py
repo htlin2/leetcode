@@ -1,5 +1,4 @@
 class Node:
-
     def __init__(self, val):
         self.val = val
         self.next = None
@@ -11,25 +10,26 @@ class BrowserHistory:
         self.head = Node(-1)
         self.tail = Node(-1)
         self.curr = Node(homepage)
-        self.head.next, self.tail.prev = self.curr, self.curr
-        self.curr.next, self.curr.prev = self.tail, self.head
+        self.head.next, self.curr.prev = self.curr, self.head
+        self.tail.prev, self.curr.next = self.curr, self.tail
 
     def visit(self, url: str) -> None:
-        node = Node(url)
-        self.curr.next, self.tail.prev = node, node
-        node.prev, node.next = self.curr, self.tail
+        self.curr.next = Node(url)
+        prev = self.curr
         self.curr = self.curr.next
+        self.curr.next, self.tail.prev = self.tail, self.curr
+        self.curr.prev = prev
 
     def back(self, steps: int) -> str:
-        while self.curr.prev != self.head and steps:
+        while steps and self.curr.prev != self.head:
+            steps -= 1
             self.curr = self.curr.prev
-            steps -= 1        
         return self.curr.val
 
     def forward(self, steps: int) -> str:
-        while self.curr.next != self.tail and steps:
+        while steps and self.curr.next != self.tail:
+            steps -= 1
             self.curr = self.curr.next
-            steps -= 1        
         return self.curr.val
 
 
