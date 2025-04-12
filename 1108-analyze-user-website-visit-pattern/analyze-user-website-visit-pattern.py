@@ -1,33 +1,36 @@
 class Solution:
     def mostVisitedPattern(self, username: List[str], timestamp: List[int], website: List[str]) -> List[str]:
         N = len(username)
-        name_visit_map = collections.defaultdict(list)
-        combs = data = sorted(zip(timestamp, username, website))
+        data = sorted(zip(timestamp, username, website))
+        name_visits = collections.defaultdict(list)
         for i in range(N):
-            name = combs[i][1]
-            visit = combs[i][2]
-            name_visit_map[name].append(visit)
-        res = collections.defaultdict(int)
+            name = data[i][1]
+            visit = data[i][2]
+            name_visits[name].append(visit)
+
+        pattern_count = collections.defaultdict(int)
         def dfs(visits, i, pattern, visited):
             if len(pattern) == 3:
                 key = tuple(pattern)
                 if key in visited: return
-                res[key] += 1
                 visited.add(key)
+                pattern_count[key] += 1
                 return
             for j in range(i, len(visits)):
                 pattern.append(visits[j])
                 dfs(visits, j + 1, pattern, visited)
                 pattern.pop()
-        for name, visits in name_visit_map.items():
+            return
+        for visits in name_visits.values():
             dfs(visits, 0, [], set())
-        tups = []
-        max_count = max(res.values())
-        for tup, count in res.items():
+        max_count = max(pattern_count.values())
+        res = []
+        for pattern, count in pattern_count.items():
             if count == max_count:
-                tups.append(tup)
-        tups.sort(key=lambda x: (x[0], x[1], x[2]))
-        return tups[0]
+                res.append(pattern)
+        res.sort()
+        return res[0]
+
 """
 Input: 
 username =  ["joe","joe","joe","james","james","james","james","mary","mary","mary"], 
