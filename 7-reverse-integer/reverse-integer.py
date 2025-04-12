@@ -1,16 +1,13 @@
 class Solution:
     def reverse(self, x: int) -> int:
-        is_negative = True if x < 0 else False
-        str_x = str(abs(x))
-        res = collections.deque([])
-        for i in range(len(str_x) - 1, -1, -1):
-            res.append(str_x[i])
-        for i in range(len(res)):
-            if res[i] == '0' and len(res) != len(str_x):
-                res.popleft()
-            else:
-                break
-        res_str = ''.join(res)
-        res_int = int(res_str)
-        if 2 ** 31 - 1 < res_int: return 0
-        return -1 * res_int if is_negative else res_int
+        MAX_RANGE = 2 ** 31 - 1
+        sign = -1 if x < 0 else 1
+        res = 0
+        x = abs(x)
+        while x:
+            digit = x % 10
+            res = res * 10 + digit
+            if res > MAX_RANGE:
+                return 0
+            x = x // 10
+        return res * sign
