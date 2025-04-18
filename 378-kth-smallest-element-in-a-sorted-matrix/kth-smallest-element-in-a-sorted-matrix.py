@@ -1,16 +1,20 @@
 class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
-        min_heap = [] # (num, row, col)
-        for col in range(len(grid[0])):
-            num = grid[0][col]
-            heapq.heappush(min_heap, (num, 0, col))
-        while k > 1:
-            k -= 1
-            num, row, col = heapq.heappop(min_heap)
-            if row + 1 < len(grid):
-                next_num = grid[row + 1][col]
-                heapq.heappush(min_heap, (next_num, row + 1, col))
-        return min_heap[0][0]
+        left, right = grid[0][0], grid[-1][-1]
+        def get_count(mid):
+            count = 0
+            for row in grid:
+                count += bisect.bisect_right(row, mid)
+            return count
+
+        while left <= right:
+            mid = (left + right) // 2
+            count = get_count(mid)
+            if count < k:
+                left = mid + 1
+            else:
+                right = mid - 1
+        return left
 
 """
 1. heap + linked list
