@@ -3,10 +3,13 @@ class Solution:
         ROWS, COLS = len(grid), len(grid[0])
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
         original_color = grid[sr][sc]
+        if original_color == color:
+            return grid
+
         def dfs(r, c):
             if r >= ROWS or c >= COLS or r < 0 or c < 0:
                 return
-            if grid[r][c] != original_color or grid[r][c] == color:
+            if grid[r][c] != original_color:
                 return
             grid[r][c] = color
             for dr, dc in directions:
