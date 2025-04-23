@@ -6,14 +6,13 @@ class Solution:
             mid = (left + right) // 2
             prev_num = nums[mid - 1] if mid - 1 >= 0 else float('-inf')
             next_num = nums[mid + 1] if mid + 1 < N else float('inf')
-            mid_num = nums[mid]
-            if prev_num != mid_num and mid_num != next_num:
-                return mid_num
-            left_size = mid - 1 if prev_num == mid_num else mid
-            if left_size % 2:
-                # odd left
-                right = mid - 1
-            else:
-                # even left
+            num = nums[mid]
+            if prev_num != num and num != next_num:
+                return num
+            left_arr = mid - 1 if prev_num == num else mid
+            if left_arr % 2 == 0:
+                # even
                 left = mid + 1
-        return nums[left]
+            else:
+                # odd
+                right = mid - 1
