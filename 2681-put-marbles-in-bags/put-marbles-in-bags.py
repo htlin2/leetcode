@@ -4,9 +4,10 @@ class Solution:
         N = len(weights)
         nums = []
         for i in range(N - 1):
-            nums.append(weights[i] + weights[i + 1])
+            num = weights[i] + weights[i + 1]
+            nums.append(num)
         nums.sort()
         i = k - 1
-        max_score = sum(nums[-i:])
-        min_score = sum(nums[:i])
-        return max_score - min_score
+        high = sum(nums[-i:])
+        low = sum(nums[:i])
+        return high - low
