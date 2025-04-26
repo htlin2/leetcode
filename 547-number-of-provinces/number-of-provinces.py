@@ -22,13 +22,13 @@ class UnionFind:
 
 class Solution:
     def findCircleNum(self, grid: List[List[int]]) -> int:
-        ROWS, COLS = len(grid), len(grid[0])
-        uf = UnionFind(ROWS)
-        for r in range(ROWS):
-            for c in range(COLS):
+        N = len(grid)
+        uf = UnionFind(N)
+        for r in range(N):
+            for c in range(r, N):
                 if grid[r][c] == 1:
                     uf.union(r, c)
-        parents = set([uf.find(i) for i in range(ROWS)])
+        parents = set([uf.find(i) for i in range(N)])
         return len(parents)
 """
 union find
