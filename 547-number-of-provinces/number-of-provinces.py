@@ -25,33 +25,8 @@ class Solution:
         N = len(grid)
         uf = UnionFind(N)
         for r in range(N):
-            for c in range(r, N):
+            for c in range(r + 1, N):
                 if grid[r][c] == 1:
                     uf.union(r, c)
         parents = set([uf.find(i) for i in range(N)])
         return len(parents)
-"""
-union find
-Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
-[
-    [1,1,0],
-    [1,1,0],
-    [0,0,1]
-]
-
-Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]]
-[
-    [1,0,0],
-    [0,1,0],
-    [0,0,1]
-]
-
-[
-    [1,0,0,1],
-    [0,1,1,0],
-    [0,1,1,1],
-    [1,0,1,1]
-]
-
-
-"""
