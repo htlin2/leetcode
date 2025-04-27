@@ -6,13 +6,13 @@ class Solution:
             combo.add(s)
             # add or skip
             res = list(s)
-            dfs(''.join(res))
             for i in range(len(s)):
                 if i % 2 == 1:
                     int_num = (int(s[i]) + a) % 10
                     res[i] = str(int_num)
             dfs(''.join(res))
             # rotate or skip
+            res = list(s)
             first = res[:b]
             second = res[-(len(s) - b):]
             res = second + first
