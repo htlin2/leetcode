@@ -5,19 +5,19 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-    def pathSum(self, root: Optional[TreeNode], target_sum: int) -> int:
-        hashmap = collections.defaultdict(int)
-        hashmap[0] = 1
+    def pathSum(self, root: Optional[TreeNode], target: int) -> int:
+        prefix_hashmap = collections.defaultdict(int)
+        prefix_hashmap[0] += 1
         res = 0
-        def dfs(node, curr_sum):
+        def dfs(node, curr):
             nonlocal res
             if not node: return
-            curr_sum += node.val
-            delta = curr_sum - target_sum
-            res += hashmap[delta]
-            hashmap[curr_sum] += 1
-            dfs(node.left, curr_sum)
-            dfs(node.right, curr_sum)
-            hashmap[curr_sum] -= 1
+            curr += node.val
+            delta = curr - target
+            res += prefix_hashmap[delta]
+            prefix_hashmap[curr] += 1
+            dfs(node.left, curr)
+            dfs(node.right, curr)
+            prefix_hashmap[curr] -= 1
         dfs(root, 0)
         return res
