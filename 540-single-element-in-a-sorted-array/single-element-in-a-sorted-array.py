@@ -4,15 +4,11 @@ class Solution:
         left, right = 0, N - 1
         while left <= right:
             mid = (left + right) // 2
-            prev_num = nums[mid - 1] if mid - 1 >= 0 else float('-inf')
-            next_num = nums[mid + 1] if mid + 1 < N else float('inf')
-            num = nums[mid]
-            if prev_num != num and num != next_num:
-                return num
-            left_arr = mid - 1 if prev_num == num else mid
-            if left_arr % 2 == 0:
-                # even
-                left = mid + 1
-            else:
-                # odd
+            curr_num = nums[mid]
+            prev_num = nums[mid - 1] if mid - 1 >= 0 else nums[-1]
+            left_length = mid - 1 if prev_num == curr_num else mid
+            if left_length % 2 == 1:
                 right = mid - 1
+            else:
+                left = mid + 1
+        return nums[right]
