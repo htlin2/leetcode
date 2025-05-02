@@ -8,15 +8,15 @@ class Node:
 
 class Solution:
     def levelOrder(self, root: 'Node') -> List[List[int]]:
-        hashmap = collections.defaultdict(list)
-        def dfs(node, level):
-            if not node: return
-            hashmap[level].append(node.val)
-            for child in node.children:
-                dfs(child, level + 1)
-            return
-        dfs(root, 0)
+        if not root: return []
         res = []
-        for i in range(len(hashmap)):
-            res.append(hashmap[i])
+        q = collections.deque([root])
+        while q:
+            temp = []
+            for _ in range(len(q)):
+                node = q.popleft()
+                temp.append(node.val)
+                for child in node.children:
+                    q.append(child)
+            res.append(temp)
         return res
