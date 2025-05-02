@@ -1,45 +1,44 @@
 class Solution:
     def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
-        is_odd = k % 2 == 1
+        res = []
         left = [] # max_heap
         right = [] # min_heap
-        res = []
         for i in range(k):
             if not left or nums[i] <= -left[0]:
                 heapq.heappush(left, -nums[i])
             else:
                 heapq.heappush(right, nums[i])
-            if len(left) - len(right) > 1:
+            if len(left) - len(right) >= 2:
                 heapq.heappush(right, -heapq.heappop(left))
-            elif len(right) - len(left) > 0:
+            if len(right) - len(left) >= 1:
                 heapq.heappush(left, -heapq.heappop(right))
-        if is_odd:
+        if k % 2 == 1:
             median = -left[0]
         else:
             median = (-left[0] + right[0]) / 2
-        balance_dict = collections.defaultdict(int)
         res.append(median)
+        removed_nums = collections.defaultdict(int)
         for i in range(k, len(nums)):
-            prev_num = nums[i - k]
-            balance_dict[prev_num] += 1
-            balance = -1 if prev_num <= median else 1
+            removed_num = nums[i - k]
+            removed_nums[removed_num] += 1
+            balance = -1 if removed_num <= median else 1
             if nums[i] <= median:
                 balance += 1
                 heapq.heappush(left, -nums[i])
-            elif nums[i] > median:
+            else:
                 balance -= 1
                 heapq.heappush(right, nums[i])
-            if balance < 0:
+            if balance == -2:
                 heapq.heappush(left, -heapq.heappop(right))
-            if balance > 0:
+            if balance == 2:
                 heapq.heappush(right, -heapq.heappop(left))
-            while left and balance_dict[-left[0]]:
-                balance_dict[-left[0]] -= 1
+            while left and removed_nums[-left[0]]:
+                removed_nums[-left[0]] -= 1
                 heapq.heappop(left)
-            while right and balance_dict[right[0]]:
-                balance_dict[right[0]] -= 1
+            while right and removed_nums[right[0]]:
+                removed_nums[right[0]] -= 1
                 heapq.heappop(right)
-            if is_odd:
+            if k % 2 == 1:
                 median = -left[0]
             else:
                 median = (-left[0] + right[0]) / 2
