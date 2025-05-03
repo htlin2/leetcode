@@ -9,13 +9,14 @@ class Solution:
         """
         Do not return anything, modify root in-place instead.
         """
-        if not root: return root
-        left = self.flatten(root.left)
-        right = self.flatten(root.right)
-        if left:
-            root.right = left
-            while left and left.right:
-                left = left.right
-            left.right = right
-        root.left = None
-        return root
+        prev = None
+        def dfs(node):
+            nonlocal prev
+            if not node: return node
+            dfs(node.right)
+            dfs(node.left)
+            node.right = prev
+            prev = node
+            node.left = None
+        dfs(root)
+        return prev
