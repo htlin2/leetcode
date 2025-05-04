@@ -6,6 +6,7 @@ class Solution:
                 continue
             if n % i == 0:
                 factors.add(i)
-                factors.add(n // i)
-        res = sorted(list(factors))
-        return res[k - 1] if k - 1 < len(res) else -1
+                k -= 1
+                if k == 0:
+                    return i
+        return -1
