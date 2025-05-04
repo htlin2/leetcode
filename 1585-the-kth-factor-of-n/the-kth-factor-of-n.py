@@ -1,12 +1,13 @@
 class Solution:
     def kthFactor(self, n: int, k: int) -> int:
-        factors = set()
-        for i in range(1, n + 1):
-            if i in factors:
-                continue
+        front, back = [], []
+        for i in range(1, int(sqrt(n)) + 1):
             if n % i == 0:
-                factors.add(i)
-                k -= 1
-                if k == 0:
-                    return i
-        return -1
+                front.append(i)
+                back.append(n // i)
+        
+        if front[-1] == back[-1]:
+            back.pop()
+        
+        res = front + back[::-1]
+        return res[k - 1] if k - 1 < len(res) else -1
