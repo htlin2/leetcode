@@ -4,7 +4,7 @@ class UnionFind:
         self.ranks = [1] * N
 
     def find(self, n):
-        if n == self.parents[n]: return n
+        if self.parents[n] == n: return n
         self.parents[n] = self.find(self.parents[self.parents[n]])
         return self.parents[n]
 
@@ -21,10 +21,41 @@ class UnionFind:
 
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        nodes = n
         uf = UnionFind(n)
-        for a, b in edges:
-            if not uf.union(a, b):
+        for n1, n2 in edges:
+            if not uf.union(n1, n2):
                 return False
-            nodes -= 1
-        return nodes == 1
+        for i in range(n):
+            uf.parents[i] = uf.find(i)
+        all_parents = set(uf.parents)
+        return len(all_parents) == 1
+
+"""
+Union Find?
+
+DFS / BFS
+edge case, 2 roots
+1 -> 2 -> 3
+4 -> 5
+not a valid tree
+
+how to detec cycle?
+
+example 2=
+Input: n = 5, edges = [[0,1],[1,2],[2,3],[1,3],[1,4]]
+                                           i
+0 -> 1 -> 2 -> 3
+     1 -> 3 (x) return false
+
+Time: O(n)
+Space: O(n)
+
+[
+    [0,1],
+    [2,3],
+    [1,2]
+]
+0 -> 1
+2 -> 3
+1 -> 2
+"""
