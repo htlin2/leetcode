@@ -6,7 +6,6 @@ class Solution:
                 if grid[r][c]:
                     adj[r].add(c)
                     adj[c].add(r)
-        print(adj)
         visited = set()
         def dfs(i):
             if i in visited: return
@@ -20,12 +19,3 @@ class Solution:
                 dfs(i)
                 res += 1
         return res
-"""
-Input: isConnected = [
-    [1,1,0],
-    [1,1,0],
-    [0,0,1]
-]
-Output: 2
-
-"""
