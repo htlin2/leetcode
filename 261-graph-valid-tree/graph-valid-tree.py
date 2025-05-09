@@ -13,7 +13,6 @@ class Solution:
                 if has_cycle(nei, node):
                     return True
             return False
-
         if has_cycle(0, -1):
             return False
         return len(visited) == n
