@@ -1,44 +1,28 @@
 class MaxStack:
     def __init__(self):
-        self.stack = [] # (val, idx)
-        self.max_heap = [] # (-val, -idx)
-        self.valid_idx = set()
-        self.idx = 0
-
-    def clean_stack(self):
-        while self.stack and self.stack[-1][-1] not in self.valid_idx:
-            self.stack.pop()
-
-    def clean_max_heap(self):
-        while self.max_heap and -self.max_heap[0][-1] not in self.valid_idx:
-            heapq.heappop(self.max_heap)
+        self.stack = sortedcontainers.SortedList() # (i, val)
+        self.values = sortedcontainers.SortedList() # (val, i)
+        self.i = 0
 
     def push(self, x: int) -> None:
-        self.stack.append((x, self.idx))
-        heapq.heappush(self.max_heap, (-x, -self.idx))
-        self.valid_idx.add(self.idx)
-        self.idx += 1
+        self.stack.add((self.i, x))
+        self.values.add((x, self.i))
+        self.i += 1
 
     def pop(self) -> int:
-        self.clean_stack()
-        val, idx = self.stack.pop()
-        self.valid_idx.remove(idx)
+        i, val = self.stack.pop()
+        self.values.remove((val, i))
         return val
 
     def top(self) -> int:
-        self.clean_stack()
-        return self.stack[-1][0]
+        return self.stack[-1][-1]
 
     def peekMax(self) -> int:
-        self.clean_max_heap()
-        return -self.max_heap[0][0]
+        return self.values[-1][0]
 
     def popMax(self) -> int:
-        self.clean_max_heap()
-        val, idx = heapq.heappop(self.max_heap)
-        val *= -1
-        idx *= -1
-        self.valid_idx.remove(idx)
+        val, i = self.values.pop()
+        self.stack.remove((i, val))
         return val
 
 
