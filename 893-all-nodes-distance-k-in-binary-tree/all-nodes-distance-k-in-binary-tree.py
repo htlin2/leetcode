@@ -8,6 +8,7 @@
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
         if not root: return []
+        res = []
         adj = collections.defaultdict(set)
         q = collections.deque([root])
         while q:
@@ -22,14 +23,13 @@ class Solution:
                     adj[node.right.val].add(node.val)
                     q.append(node.right)
         visited = set()
-        res = []
-        def dfs(val, level):
-            if val in visited: return
+        def dfs(val, k):
             visited.add(val)
-            if level == k:
+            if k == 0:
                 res.append(val)
                 return
             for nei in adj[val]:
-                dfs(nei, level + 1)
-        dfs(target.val, 0)
+                if nei in visited: continue
+                dfs(nei, k - 1)
+        dfs(target.val, k)
         return res
