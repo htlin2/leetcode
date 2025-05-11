@@ -2,8 +2,8 @@ class Solution:
     def numRabbits(self, ans: List[int]) -> int:
         res = 0
         counter = collections.Counter(ans)
-        for key, val in counter.items():
-            group = key + 1
-            number = math.ceil(val / group)
-            res += group * number
+        for num, freq in counter.items():
+            group_size = num + 1
+            groups = math.ceil(freq / group_size)
+            res += groups * group_size
         return res
