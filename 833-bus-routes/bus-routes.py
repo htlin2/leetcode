@@ -1,13 +1,10 @@
 class Solution:
     def numBusesToDestination(self, routes: List[List[int]], source: int, target: int) -> int:
-        if source == target:
-            return 0
-
-        adj = collections.defaultdict(set)
+        adj = collections.defaultdict(set) # stop: route[]
         q = collections.deque([(source, 0)]) # [stop, count]
-        for route in range(len(routes)):
-            for stop in routes[route]:
-                adj[stop].add(route)
+        for i in range(len(routes)):
+            for stop in routes[i]:
+                adj[stop].add(i)
         
         visited_route = set()
         visited_stop = set()
