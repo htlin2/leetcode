@@ -11,8 +11,12 @@ class Solution:
             front = substr[:b]
             back = substr[b:]
             return back + front
+        res = s
         visited = set()
         def dfs(substr):
+            nonlocal res
+            if int(substr) <= int(res):
+                res = substr
             if substr in visited: return
             visited.add(substr)
             added_substr = add(substr)
@@ -21,7 +25,7 @@ class Solution:
             dfs(rotated_substr)
             return
         dfs(s)
-        return sorted(list(visited))[0]
+        return res
 """
 backtracking
 add a to odd idx
