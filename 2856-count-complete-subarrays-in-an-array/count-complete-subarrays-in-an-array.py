@@ -1,15 +1,18 @@
 class Solution:
     def countCompleteSubarrays(self, nums: List[int]) -> int:
         uniq_count = len(set(nums))
+        counter = collections.defaultdict(int)
+        left = 0
         res = 0
-        for i in range(len(nums)):
-            visited = set()
-            for j in range(i, len(nums)):
-                visited.add(nums[j])
-                if len(visited) == uniq_count:
-                    res += 1
+        for right in range(len(nums)):
+            counter[nums[right]] += 1
+            while len(counter) == uniq_count:
+                res += len(nums) - right
+                counter[nums[left]] -= 1
+                if counter[nums[left]] == 0:
+                    del counter[nums[left]]
+                left += 1
         return res
-
 """
-brute force
+sliding window
 """
