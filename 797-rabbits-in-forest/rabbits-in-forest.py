@@ -3,8 +3,7 @@ class Solution:
         answers = [a + 1 for a in answers]
         counter = collections.Counter(answers)
         res = 0
-        for k, v in counter.items():
-            group_size = k
-            number = math.ceil(v / group_size)
-            res += group_size * number
+        for group_size, count in counter.items():
+            number = math.ceil(count / group_size)
+            res += number * group_size
         return res
