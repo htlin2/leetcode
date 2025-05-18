@@ -13,12 +13,14 @@ class Solution:
                 res += dfs(dr + r, dc + c, label)
             return res
 
+        # Step 1: label islands and calculate area
         for r in range(ROWS):
             for c in range(COLS):
                 if grid[r][c] == 1:
                     island_size[label] = dfs(r, c, label)
                     label += 1
 
+        # Step 2: connect and get max area near by
         res = 0 if not island_size else max(island_size.values())
         for r in range(ROWS):
             for c in range(COLS):
@@ -34,10 +36,3 @@ class Solution:
                     curr_size += island_size[label]
                 res = max(res, curr_size)
         return res
-"""
-Input: grid = [
-    [1,1],
-    [0,1]
-]
-
-"""
