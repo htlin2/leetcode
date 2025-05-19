@@ -10,7 +10,9 @@ class Solution:
         def bfs(src, dst):
             if src not in adj or dst not in adj: return -1
             visited = set()
-            q = collections.deque([[src, 1]])
+            q = collections.deque()
+            q.append([src, 1])
+            visited.add(src)
             while q:
                 node, val = q.popleft()
                 if node == dst: return val
