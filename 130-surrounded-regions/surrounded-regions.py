@@ -21,16 +21,9 @@ class Solution:
             dfs(0, c, '*')
             dfs(ROWS - 1, c, '*')
 
-        # convert middle O to x
-        for r in range(1, ROWS - 1):
-            for c in range(1, COLS - 1):
-                dfs(r, c, 'X', '*')
-
-        # convert all * to O
         for r in range(ROWS):
-            dfs(r, 0, 'O')
-            dfs(r, COLS - 1, 'O')
-
-        for c in range(COLS):
-            dfs(0, c, 'O')
-            dfs(ROWS - 1, c, 'O')
+            for c in range(COLS):
+                if grid[r][c] == '*':
+                    grid[r][c] = 'O'
+                elif grid[r][c] == 'O':
+                    grid[r][c] = 'X'
