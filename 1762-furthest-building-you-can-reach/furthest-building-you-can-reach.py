@@ -3,15 +3,12 @@ class Solution:
         max_heap = []
         for i in range(len(heights) - 1):
             delta = heights[i + 1] - heights[i]
-            if delta <= 0:
-                continue
-            elif bricks >= delta:
-                bricks -= delta
-                heapq.heappush(max_heap, -delta)
-            elif ladders:
+            if delta <= 0: continue
+
+            bricks -= delta
+            heapq.heappush(max_heap, -delta)
+            if bricks < 0:
+                if not ladders: return i
                 ladders -= 1
-                heapq.heappush(max_heap, -delta)
-                bricks += -heapq.heappop(max_heap) - delta
-            else:
-                return i
+                bricks += -heapq.heappop(max_heap)
         return len(heights) - 1
