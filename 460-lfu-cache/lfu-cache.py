@@ -4,7 +4,7 @@ class Node:
         self.val = val
         self.prev = None
         self.next = None
-        self.count = 1
+        self.count = 0
 
 class LFUCache:
     def __init__(self, cap: int):
@@ -13,24 +13,24 @@ class LFUCache:
         self.cap = cap
         
     def insert(self, node):
+        node.count += 1
         if node.count not in self.count_ll_map:
             head, tail = Node(-1, -1), Node(-1, -1)
             head.next, tail.prev = tail, head
             self.count_ll_map[node.count] = {'head': head, 'tail': tail}
         head = self.count_ll_map[node.count]['head']
-        next_node = head.next
-        node.next, node.prev = next_node, head
-        head.next, next_node.prev = node, node
+        prev_node = head.next
+        node.next, node.prev = prev_node, head
+        head.next, prev_node.prev = node, node
         self.key_node_map[node.key] = node
         return node
 
     def remove(self, node):
+        del self.key_node_map[node.key]
         prev_node, next_node = node.prev, node.next
+        prev_node.next, next_node.prev = next_node, prev_node
         if prev_node.key == -1 and next_node.key == -1:
             del self.count_ll_map[node.count]
-        else:
-            prev_node.next, next_node.prev = next_node, prev_node
-        del self.key_node_map[node.key]
         return node
 
     def get(self, key: int) -> int:
@@ -38,7 +38,6 @@ class LFUCache:
             return -1
         node = self.key_node_map[key]
         self.remove(node)
-        node.count += 1
         self.insert(node)
         return node.val
 
@@ -49,11 +48,11 @@ class LFUCache:
                 min_key = min(self.count_ll_map.keys())
                 LRU_node = self.count_ll_map[min_key]['tail'].prev
                 self.remove(LRU_node)
-            self.insert(node)
         else:
-            self.get(key)
             node = self.key_node_map[key]
             node.val = val
+            self.remove(node)
+        self.insert(node)
 
 # Your LFUCache object will be instantiated and called as such:
 # obj = LFUCache(capacity)
