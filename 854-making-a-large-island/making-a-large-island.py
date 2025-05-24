@@ -1,38 +1,39 @@
 class Solution:
     def largestIsland(self, grid: List[List[int]]) -> int:
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        directions = [(1, 0), (-1, 0), (0, -1), (0, 1)]
         ROWS, COLS = len(grid), len(grid[0])
-        island_size = collections.defaultdict(int) # label: island_size
-        label = 2
+        label_area = collections.defaultdict(int) # label: area
         def dfs(r, c, label):
             if r < 0 or c < 0 or r >= ROWS or c >= COLS: return 0
             if grid[r][c] == 0 or grid[r][c] == label: return 0
             grid[r][c] = label
             res = 1
-            for dr, dc in directions:
-                res += dfs(dr + r, dc + c, label)
+            for nr, nc in directions:
+                res += dfs(nr + r, nc + c, label)
             return res
-
-        # Step 1: label islands and calculate area
+        label = 2
         for r in range(ROWS):
             for c in range(COLS):
                 if grid[r][c] == 1:
-                    island_size[label] = dfs(r, c, label)
+                    area = dfs(r, c, label)
+                    label_area[label] = area
                     label += 1
 
-        # Step 2: connect and get max area near by
-        res = 0 if not island_size else max(island_size.values())
+        if label_area:
+            res = max(label_area.values())
+        else:
+            res = 0
         for r in range(ROWS):
             for c in range(COLS):
                 if grid[r][c] != 0: continue
-                curr_size = 1
-                visited_labels = set()
+                visited = set()
+                curr_area = 1
                 for dr, dc in directions:
                     nr, nc = dr + r, dc + c
                     if nr < 0 or nc < 0 or nr >= ROWS or nc >= COLS: continue
                     label = grid[nr][nc]
-                    if label in visited_labels: continue
-                    visited_labels.add(label)
-                    curr_size += island_size[label]
-                res = max(res, curr_size)
-        return res
+                    if label in visited: continue
+                    curr_area += label_area[label]
+                    visited.add(label)
+                res = max(curr_area, res)
+        return 1 if res == 0 else res
