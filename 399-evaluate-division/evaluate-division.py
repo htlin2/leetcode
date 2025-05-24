@@ -1,29 +1,25 @@
 class Solution:
     def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
-        adj = collections.defaultdict(list) # a: (b, val)
+        adj = collections.defaultdict(set) #
         for i in range(len(equations)):
             a, b = equations[i]
             val = values[i]
-            adj[a].append([b, val])
-            adj[b].append([a, 1 / val])
-        
-        def bfs(src, dst):
-            if src not in adj or dst not in adj: return -1
-            visited = set()
-            q = collections.deque()
-            q.append([src, 1])
-            visited.add(src)
-            while q:
-                node, val = q.popleft()
-                if node == dst: return val
-                for nei, nei_val in adj[node]:
-                    if nei in visited: continue
-                    visited.add(nei)
-                    q.append([nei, nei_val * val])
-            return -1
-
+            adj[a].add((b, val))
+            adj[b].add((a, 1 / val))
         res = []
+
+        def dfs(src, dst, weight, visited):
+            if src == dst: return weight
+            visited.add(src)
+            for nei_src, nei_weight in adj[src]:
+                if nei_src in visited: continue
+                res = dfs(nei_src, dst, weight * nei_weight, visited)
+                if res != -1:
+                    return res
+            return -1
         for q1, q2 in queries:
-            res.append(bfs(q1, q2))
-        
+            if q1 not in adj or q2 not in adj:
+                res.append(-1)
+            else:
+                res.append(dfs(q1, q2, 1, set()))
         return res
