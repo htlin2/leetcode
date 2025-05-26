@@ -1,26 +1,29 @@
 class Solution:
     def minInsertions(self, s: str) -> int:
-        stack = []
         res = 0
+        stack = [] # (
         i = 0
         while i < len(s):
-            if s[i] == '(':
-                stack.append(s[i])
+            char = s[i]
+            if char == '(':
+                stack.append(char)
                 i += 1
-            else:
-                # )
+            elif char == ')':
                 if i + 1 < len(s) and s[i + 1] == ')':
                     if stack:
                         stack.pop()
+                        i += 2
                     else:
+                        i += 2
                         res += 1
-                    i += 2
                 else:
+                    # only single )
                     if stack:
                         stack.pop()
+                        i += 1
                         res += 1
-                        i += 1
                     else:
-                        res += 2
                         i += 1
+                        res += 2
         return res + len(stack) * 2
+                
