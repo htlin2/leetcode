@@ -13,6 +13,7 @@ class Solution:
                 if not dfs(nei):
                     return False
             visited.add(src)
+            cycle.remove(src)
             return True
         for i in range(N):
             if not dfs(i):
