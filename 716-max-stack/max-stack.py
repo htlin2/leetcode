@@ -1,7 +1,8 @@
 class MaxStack:
+
     def __init__(self):
+        self.max_heap = [] # max_stack = [(val, i)]
         self.stack = [] # (val, i)
-        self.max_heap = [] # (-val, -i)
         self.i = 0
         self.valid_i = set()
 
@@ -40,7 +41,6 @@ class MaxStack:
         i *= -1
         self.valid_i.remove(i)
         return val
-
 
 # Your MaxStack object will be instantiated and called as such:
 # obj = MaxStack()
