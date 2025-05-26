@@ -1,15 +1,17 @@
 class Solution:
     def gcdOfStrings(self, str1: str, str2: str) -> str:
-        if len(str1) < len(str2):
-            return self.gcdOfStrings(str2, str1)
         n1, n2 = len(str1), len(str2)
-        for i in range(n2 + 1, 0, -1):
-            if n1 % i or n2 % i:
+        if n1 < n2:
+            return self.gcdOfStrings(str2, str1)
+        for i in range(n2, 0, -1):
+            w2 = str2[:i]
+            w1 = str1[:i]
+            if n2 % len(w2) != 0 or n1 % len(w1) != 0:
                 continue
-            s2 = str2[:i]
-            base2 = n2 // i
-            base1 = n1 // i
-            if s2 * base2 == str2 and s2 * base1 == str1:
-                return s2
+            if w1 != w2:
+                continue
+            base2 = n2 // len(w2)
+            base1 = n1 // len(w1)
+            if base2 * w2 == str2 and base1 * w1 == str1:
+                return w2
         return ''
-                
