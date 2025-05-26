@@ -11,24 +11,19 @@ class Solution:
                 if w1[j] != w2[j]:
                     adj[w1[j]].add(w2[j])
                     break
-        visited = set()
-        cycle = set()
-        res = []
-        def has_cycle(char):
-            if char in visited:
-                return False
-            if char in cycle:
-                return True
+
+        visited, cycle, res = set(), set(), []
+        def dfs(char):
+            if char in visited: return True
+            if char in cycle: return False
             cycle.add(char)
             for nei in adj[char]:
-                if has_cycle(nei):
-                    return True
+                if not dfs(nei): return False
             visited.add(char)
             res.append(char)
-            return False
+            return True
         for k in adj.copy():
-            if has_cycle(k):
-                return ''
+            if not dfs(k): return ''
         return ''.join(res[::-1])
 """
 Input: words = ["wrt","wrf","er","ett","rftt"]
