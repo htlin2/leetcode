@@ -1,15 +1,15 @@
 class Solution:
     def longestConsecutive(self, nums: List[int]) -> int:
-        nums_set = set(nums)
-        res = 0
-        for num in nums_set:
-            if num - 1 not in nums_set:
-                curr = 0
-                while num in nums_set:
-                    curr += 1
-                    num += 1
-                res = max(res, curr)
-        return res
+        if not nums: return 0
+        hashmap = collections.defaultdict(int)
+        for num in nums:
+            if hashmap[num] != 0: continue
+            prev_count = hashmap[num - 1]
+            next_count = hashmap[num + 1]
+            hashmap[num] = prev_count + next_count + 1
+            hashmap[num - prev_count] = hashmap[num]
+            hashmap[num + next_count] = hashmap[num]
+        return max(hashmap.values())
 """
 hashmap
 
