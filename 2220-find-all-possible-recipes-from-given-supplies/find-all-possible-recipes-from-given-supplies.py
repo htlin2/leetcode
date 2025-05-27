@@ -9,13 +9,12 @@ class Solution:
         
         def dfs(src, cycle):
             if src in supplies: return True
+            if src not in adj: return False
             if src in cycle: return False
             cycle.add(src)
-            res = []
             for nei in adj[src]:
-                res.append(dfs(nei, cycle))
-            if not res or not all(res):
-                return False
+                if not dfs(nei, cycle):
+                    return False
             supplies.add(src)
             return True
         
