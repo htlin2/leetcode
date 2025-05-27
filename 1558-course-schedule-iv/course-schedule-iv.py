@@ -3,20 +3,18 @@ class Solution:
         adj = collections.defaultdict(set)
         for a, b in prerequisites:
             adj[a].add(b)
-        def dfs(src, dst, visited, cycle):
+        def dfs(src, dst, cycle):
             if src == dst: return True
-            if src in visited: return False
-            if src in cycle: return True
+            if src in cycle: return False
             cycle.add(src)
             for nei in adj[src]:
-                if dfs(nei, dst, visited, cycle):
+                if dfs(nei, dst, cycle):
                     return True
-            visited.add(src)
             return False
         
         res = []
         for src, dst in q:
-            res.append(dfs(src, dst, set(), set()))
+            res.append(dfs(src, dst, set()))
         return res
 """
 """
