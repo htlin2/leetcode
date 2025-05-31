@@ -11,11 +11,15 @@ class Solution:
             s_arr = list(s)
             for i in range(1, len(s), 2):
                 s_arr[i] = str((int(s_arr[i]) + int(a)) % 10)
-            dfs(''.join(s_arr))
+            sub_s = ''.join(s_arr)
+            if sub_s not in visited:
+                dfs(sub_s)
             # rotate b
             prefix = s[-b:]
             postfix = s[:-b]
-            dfs(prefix + postfix)
+            sub_s = prefix + postfix
+            if sub_s not in visited:
+                dfs(sub_s)
             return
         dfs(s)
         return res
