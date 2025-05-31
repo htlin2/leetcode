@@ -1,41 +1,32 @@
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
-        adj = {char: set() for word in words for char in word}
+        adj = {}
+        for w in words:
+            for char in w:
+                adj[char] = set()
         for i in range(len(words) - 1):
-            w1 = words[i]
-            w2 = words[i + 1]
-            min_length = min(len(w1), len(w2))
-            if w1[:min_length] == w2[:min_length] and len(w1) > len(w2):
-                return ''
+            curr_word = words[i]
+            next_word = words[i + 1]
+            min_length = min(len(curr_word), len(next_word))
             for j in range(min_length):
-                if w1[j] != w2[j]:
-                    adj[w1[j]].add(w2[j])
+                if curr_word[j] != next_word[j]:
+                    adj[curr_word[j]].add(next_word[j])
                     break
-
-        visited, cycle, res = set(), set(), []
-        def dfs(char):
+            if len(curr_word) > len(next_word) and curr_word[:min_length] == next_word[:min_length]:
+                return ''
+        res = []
+        visited = set()
+        def dfs(char, cycle):
             if char in visited: return True
             if char in cycle: return False
             cycle.add(char)
             for nei in adj[char]:
-                if not dfs(nei): return False
+                if not dfs(nei, cycle): return False
             visited.add(char)
             res.append(char)
             return True
-        for k in adj.copy():
-            if not dfs(k): return ''
+        for char in adj.copy():
+            if char in visited: continue
+            if not dfs(char, set()):
+                return ''
         return ''.join(res[::-1])
-"""
-Input: words = ["wrt","wrf","er","ett","rftt"]
-Output: "wertf"
-w e r
-    r t f
-      t f
-topcological sort
-t: f
-w: e
-r: t
-e: r
-
-w -> e -> r -> t -> f
-"""
