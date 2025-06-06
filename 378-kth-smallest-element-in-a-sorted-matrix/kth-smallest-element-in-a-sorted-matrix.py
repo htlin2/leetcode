@@ -1,18 +1,15 @@
 class Solution:
     def kthSmallest(self, grid: List[List[int]], k: int) -> int:
-        def get_total(mid):
-            res = 0
-            for row in grid:
-                res += bisect.bisect_right(row, mid)
-            return res
-        left, right = grid[0][0], grid[-1][-1]
-        while left <= right:
-            mid = (left + right) // 2
-            total = get_total(mid)
-            if total == k:
-                right = mid - 1
-            elif total < k:
-                left = mid + 1
-            else:
-                right = mid - 1
-        return left
+        ROWS, COLS = len(grid), len(grid[0])
+        min_heap = [] # val, r, c
+        for c in range(COLS):
+            val = grid[0][c]
+            to_add = (val, 0, c)
+            heapq.heappush(min_heap, to_add)
+        k -= 1
+        while k:
+            k -= 1
+            _, r, c = heapq.heappop(min_heap)
+            if r + 1 < ROWS:
+                heapq.heappush(min_heap,(grid[r + 1][c], r + 1, c))
+        return min_heap[0][0]
