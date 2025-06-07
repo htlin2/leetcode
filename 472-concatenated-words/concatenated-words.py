@@ -1,11 +1,9 @@
 class Solution:
     def findAllConcatenatedWordsInADict(self, words: List[str]) -> List[str]:
         words_set = set(words)
-        res = []
         memo = {}
         def dfs(w):
-            if w in memo:
-                return memo[w]
+            if w in memo: return memo[w]
             for i in range(1, len(w)):
                 prefix = w[:i]
                 postfix = w[i:]
@@ -15,7 +13,7 @@ class Solution:
                         return True
             memo[w] = False
             return False
-
+        res = []
         for w in words:
             if dfs(w):
                 res.append(w)
