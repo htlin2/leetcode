@@ -1,7 +1,8 @@
 class Solution:
     def medianSlidingWindow(self, nums: List[int], k: int) -> List[float]:
-        left = [] # max_heap
+        left = [] # max_heap val
         right = [] # min_heap
+        res = []
         for i in range(k):
             if not left or nums[i] <= -left[0]:
                 heapq.heappush(left, -nums[i])
@@ -15,12 +16,12 @@ class Solution:
             median = -left[0]
         else:
             median = (-left[0] + right[0]) / 2
-        res = [median]
+        res.append(median)
         balance_dict = collections.defaultdict(int)
         for i in range(k, len(nums)):
-            removed_num = nums[i - k]
-            balance_dict[removed_num] += 1
-            balance = -1 if removed_num <= median else 1
+            prev_num = nums[i - k]
+            balance_dict[prev_num] += 1
+            balance = -1 if prev_num <= median else 1
             if nums[i] <= median:
                 heapq.heappush(left, -nums[i])
                 balance += 1
@@ -29,7 +30,7 @@ class Solution:
                 balance -= 1
             if balance < 0:
                 heapq.heappush(left, -heapq.heappop(right))
-            elif balance > 0:
+            elif 0 < balance:
                 heapq.heappush(right, -heapq.heappop(left))
             while left and balance_dict[-left[0]]:
                 balance_dict[-left[0]] -= 1
@@ -43,5 +44,3 @@ class Solution:
                 median = (-left[0] + right[0]) / 2
             res.append(median)
         return res
-"""
-"""
