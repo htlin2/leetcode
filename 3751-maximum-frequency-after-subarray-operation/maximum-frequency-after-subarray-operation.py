@@ -14,3 +14,13 @@ class Solution:
                 max_sum = max(max_sum, curr_sum)
             max_increase = max(max_increase, max_sum)
         return counter.get(k, 0) + max_increase
+"""
+Input:
+nums = [3, 2, 3, 7, 3, 2]
+k = 2
+Output: 4
+
+t == 3
+[3, 2, 3, 7, 3, 2]
+[1, 0, 1, 1, 2, 1] = curr_sum
+"""
