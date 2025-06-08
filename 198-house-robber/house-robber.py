@@ -1,14 +1,13 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        N = len(nums)
-        dp = collections.defaultdict(int) # i: total
-        for i in range(N):
-            rob = dp[i - 2] + nums[i]
-            skip = dp[i - 1]
-            dp[i] = max(rob, skip)
-        return dp[N - 1]
-
-"""
-dp
-
-"""
+        memo = {}
+        def dfs(i):
+            if i in memo: return memo[i]
+            if i >= len(nums): return 0
+            # skip
+            res = dfs(i + 1)
+            # rob
+            res = max(res, dfs(i + 2) + nums[i])
+            memo[i] = res
+            return res
+        return dfs(0)
