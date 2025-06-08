@@ -1,10 +1,10 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
-        dp = collections.defaultdict(int)
+        rob, skip = 0, 0
         for i in range(len(nums) - 1, -1, -1):
+            temp = max(skip + nums[i], rob)
             # skip
-            skip = dp[i + 1]
+            skip = rob
             # rob
-            rob = dp[i + 2] + nums[i]
-            dp[i] = max(skip, rob)
-        return dp[0]
+            rob = temp
+        return rob
