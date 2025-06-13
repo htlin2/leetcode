@@ -9,7 +9,6 @@ class Solution:
             if knows(candidate, i):
                 candidate = i
         
-        print(candidate)
         for i in range(n):
             if i == candidate: continue
             if knows(candidate, i) or not knows(i, candidate):
