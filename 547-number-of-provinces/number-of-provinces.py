@@ -1,27 +1,38 @@
+class UnionFind:
+    def __init__(self, n):
+        self.parents = [i for i in range(n)]
+        self.ranks = [1] * n
+
+    def find(self, n):
+        if self.parents[n] == n: return n
+        self.parents[n] = self.find(self.parents[self.parents[n]])
+        return self.parents[n]
+    
+    def union(self, n1, n2):
+        p1, p2 = self.find(n1), self.find(n2)
+        if p1 == p2: return False
+        if self.ranks[p1] >= self.ranks[p2]:
+            self.parents[p2] = p1
+            self.ranks[p1] += self.ranks[p2]
+        else:
+            self.parents[p1] = p2
+            self.ranks[p2] += self.ranks[p1]
+        return True
+
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
         N = len(isConnected)
-        adj = collections.defaultdict(set)
+        uf = UnionFind(N)
+        connections = 0
         for i in range(N):
             for j in range(i + 1, N):
-                if isConnected[i][j] == 1:
-                    adj[i].add(j)
-                    adj[j].add(i)
-        visited = set()
-        def dfs(node):
-            if node in visited: return
-            visited.add(node)
-            for nei in adj[node]:
-                dfs(nei)
-            return
-        res = 0
-        for i in range(N):
-            if i in visited: continue
-            dfs(i)
-            res += 1 
-        return res
-
+                if not isConnected[i][j]: continue
+                if uf.union(i, j):
+                    connections += 1
+        return N - connections
 """
+union find or dfs
+
 Input: isConnected = [
     [1,1,0],
     [1,1,0],
