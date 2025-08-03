@@ -2,57 +2,80 @@ class Node:
     def __init__(self, key, val):
         self.key = key
         self.val = val
-        self.prev = None
-        self.next = None
         self.count = 0
+        self.next = None
+        self.prev = None
+
+class LL:
+    def __init__(self):
+        self.head = Node(-1, -1)
+        self.tail = Node(-1, -1)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+        # self.key_node_map = {} # key: Node
+    
+    def insert(self, curr_node):
+        prev_node = self.head
+        next_node = self.head.next
+        curr_node.next, curr_node.prev = next_node, prev_node
+        prev_node.next, next_node.prev = curr_node, curr_node
+        # self.key_node_map[curr_node.key] = node
+        return curr_node
+    
+    def remove(self, curr_node):
+        # del self.key_node_map[curr_node.key]
+        prev_node = curr_node.prev
+        next_node = curr_node.next
+        prev_node.next, next_node.prev = next_node, prev_node
+        return curr_node
 
 class LFUCache:
     def __init__(self, cap: int):
-        self.key_node_map = {} # key: Node
-        self.count_ll_map = {} # count: {head, tail}
         self.cap = cap
-        
+        self.count_ll_map = {} # count: LL
+        self.key_node_map = {} # key: Node
+
     def insert(self, node):
         node.count += 1
-        if node.count not in self.count_ll_map:
-            head, tail = Node(-1, -1), Node(-1, -1)
-            head.next, tail.prev = tail, head
-            self.count_ll_map[node.count] = {'head': head, 'tail': tail}
-        head = self.count_ll_map[node.count]['head']
-        prev_node = head.next
-        node.next, node.prev = prev_node, head
-        head.next, prev_node.prev = node, node
+        if node.count in self.count_ll_map:
+            ll = self.count_ll_map[node.count]
+        else:
+            ll = LL()
+            self.count_ll_map[node.count] = ll
+        ll.insert(node)
         self.key_node_map[node.key] = node
         return node
-
+    
     def remove(self, node):
         del self.key_node_map[node.key]
-        prev_node, next_node = node.prev, node.next
-        prev_node.next, next_node.prev = next_node, prev_node
-        if prev_node.key == -1 and next_node.key == -1:
+        ll = self.count_ll_map[node.count]
+        ll.remove(node)
+        if ll.head.next.val == -1:
             del self.count_ll_map[node.count]
         return node
 
     def get(self, key: int) -> int:
-        if key not in self.key_node_map:
-            return -1
+        if key not in self.key_node_map: return -1
         node = self.key_node_map[key]
         self.remove(node)
         self.insert(node)
         return node.val
 
-    def put(self, key: int, val: int) -> None:
-        if key not in self.key_node_map:
-            node = Node(key, val)
-            if len(self.key_node_map) == self.cap:
-                min_key = min(self.count_ll_map.keys())
-                LRU_node = self.count_ll_map[min_key]['tail'].prev
-                self.remove(LRU_node)
+    def put(self, key: int, value: int) -> None:
+        if key in self.key_node_map:
+            self.key_node_map[key].val = value
+            self.get(key)
         else:
-            node = self.key_node_map[key]
-            node.val = val
-            self.remove(node)
-        self.insert(node)
+            node = Node(key, value)
+            if self.cap == len(self.key_node_map):
+                # handle LFU
+                min_count = min(self.count_ll_map)
+                ll = self.count_ll_map[min_count]
+                LFU_node = ll.tail.prev
+                self.remove(LFU_node)
+            self.insert(node)
+        
+
 
 # Your LFUCache object will be instantiated and called as such:
 # obj = LFUCache(capacity)
