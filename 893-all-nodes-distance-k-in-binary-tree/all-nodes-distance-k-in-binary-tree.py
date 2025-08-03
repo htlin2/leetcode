@@ -7,29 +7,41 @@
 
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        if not root: return []
-        res = []
         adj = collections.defaultdict(set)
-        q = collections.deque([root])
-        while q:
-            for _ in range(len(q)):
-                node = q.popleft()
-                if node.left:
-                    adj[node.val].add(node.left.val)
-                    adj[node.left.val].add(node.val)
-                    q.append(node.left)
-                if node.right:
-                    adj[node.val].add(node.right.val)
-                    adj[node.right.val].add(node.val)
-                    q.append(node.right)
+        def build_adj(node):
+            if not node: return
+            left = node.left
+            right = node.right
+            if left:
+                adj[node.val].add(left.val)
+                adj[left.val].add(node.val)
+            if right:
+                adj[node.val].add(right.val)
+                adj[right.val].add(node.val)
+            build_adj(node.left)
+            build_adj(node.right)
+            return
+        build_adj(root)
         visited = set()
-        def dfs(val, k):
+        res = []
+        def dfs(val, count):
+            if val in visited: return
             visited.add(val)
-            if k == 0:
+            if not count:
                 res.append(val)
                 return
             for nei in adj[val]:
-                if nei in visited: continue
-                dfs(nei, k - 1)
+                dfs(nei, count - 1)
+            return
         dfs(target.val, k)
         return res
+"""
+graph + dfs
+3: [5, 1]
+5: [3, 2, 6]
+6: [5]
+2: [6, 7, 4]
+1: [3, 0, 8]
+
+
+"""
