@@ -10,10 +10,15 @@ class Solution:
         def dfs(node):
             nonlocal res
             if not node: return 0
-            left = node.val + dfs(node.left)
-            right = node.val + dfs(node.right)
-            total = left + right - node.val
-            res = max(res, total, node.val, left, right)
-            return max(left, right, node.val)
+            left = dfs(node.left)
+            right = dfs(node.right)
+            curr_max = max(left + right + node.val, left + node.val, right + node.val)
+            res = max(res, curr_max, node.val)
+            return max(max(left, right) + node.val, node.val)
         dfs(root)
         return res
+
+"""
+postorder dfs
+
+"""
