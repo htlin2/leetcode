@@ -26,7 +26,7 @@ class Solution:
             balance_dict[prev_num] += 1
             # find balance
             balance = -1 if prev_num <= median else 1
-            if not left or nums[i] <= median:
+            if nums[i] <= median:
                 balance += 1
                 heapq.heappush(left, -nums[i])
             else:
