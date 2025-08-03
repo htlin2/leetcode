@@ -6,18 +6,24 @@
 #         self.right = right
 class Solution:
     def pathSum(self, root: Optional[TreeNode], target: int) -> int:
+        path_count = collections.defaultdict(int) # path_sum: count
+        path_count[0] = 1
         res = 0
-        prefix_sum = collections.defaultdict(int)
-        prefix_sum[0] = 1
         def dfs(node, curr_sum):
             nonlocal res
             if not node: return
             curr_sum += node.val
             delta = curr_sum - target
-            res += prefix_sum[delta]
-            prefix_sum[curr_sum] += 1
+            res += path_count[delta]
+            path_count[curr_sum] += 1
             dfs(node.left, curr_sum)
             dfs(node.right, curr_sum)
-            prefix_sum[curr_sum] -= 1
+            path_count[curr_sum] -= 1
+            return
         dfs(root, 0)
         return res
+"""
+preorder dfs
+store all accumulated path
+subtract to get current path sum
+"""
