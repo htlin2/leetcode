@@ -1,34 +1,38 @@
 class MaxStack:
 
     def __init__(self):
-        self.max_heap = [] # max_stack = [(val, i)]
-        self.stack = [] # (val, i)
-        self.i = 0
-        self.valid_i = set()
+        self.max_heap = [] # (-val, -id)
+        self.stack = [] # (-val, -id)
+        self.id = 1
+        self.valid_ids = set()
 
     def clean_stack(self):
-        while self.stack and self.stack[-1][-1] not in self.valid_i:
+        while self.stack and -self.stack[-1][-1] not in self.valid_ids:
             self.stack.pop()
-
+    
     def clean_heap(self):
-        while self.max_heap and -self.max_heap[0][-1] not in self.valid_i:
+        while self.max_heap and -self.max_heap[0][-1] not in self.valid_ids:
             heapq.heappop(self.max_heap)
 
     def push(self, x: int) -> None:
-        self.stack.append((x, self.i))
-        heapq.heappush(self.max_heap, (-x, -self.i))
-        self.valid_i.add(self.i)
-        self.i += 1
+        _tuple = (-x, -self.id)
+        self.valid_ids.add(self.id)
+        self.stack.append(_tuple)
+        heapq.heappush(self.max_heap, _tuple)
+        self.id += 1
+        return
 
     def pop(self) -> int:
         self.clean_stack()
-        val, i = self.stack.pop()
-        self.valid_i.remove(i)
-        return val
+        x, _id = self.stack.pop()
+        _id *= -1
+        x *= -1
+        self.valid_ids.remove(_id)
+        return x 
 
     def top(self) -> int:
         self.clean_stack()
-        return self.stack[-1][0]
+        return -self.stack[-1][0]
 
     def peekMax(self) -> int:
         self.clean_heap()
@@ -36,11 +40,13 @@ class MaxStack:
 
     def popMax(self) -> int:
         self.clean_heap()
-        val, i = heapq.heappop(self.max_heap)
-        val *= -1
-        i *= -1
-        self.valid_i.remove(i)
-        return val
+        x, _id = heapq.heappop(self.max_heap)
+        x *= -1
+        _id *= -1
+        self.valid_ids.remove(_id)
+        self.clean_stack()
+        return x
+
 
 # Your MaxStack object will be instantiated and called as such:
 # obj = MaxStack()
