@@ -5,14 +5,11 @@ class Solution:
         postfix = [1] * N
         for i in range(1, N):
             if nums[i] > nums[i - 1]:
-                prefix[i] = prefix[i - 1] + 1
+                prefix[i] += prefix[i - 1]
         for i in range(N - 2, -1, -1):
             if nums[i] > nums[i + 1]:
-                postfix[i] = postfix[i + 1] + 1
-        res = []
+                postfix[i] += postfix[i + 1]
+        res = 0
         for i in range(N):
-            res.append(max(prefix[i], postfix[i]))
-        return sum(res)
-"""
-heap / greedy / monotonic stack
-"""
+            res += max(prefix[i], postfix[i])
+        return res
