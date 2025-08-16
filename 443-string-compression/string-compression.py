@@ -10,7 +10,11 @@ class Solution:
             chars[left] = char
             left += 1
             if count > 1:
-                for d in str(count):
-                    chars[left] = d
+                for str_d in str(count):
+                    chars[left] = str_d
                     left += 1
         return left
+
+"""
+two pointers?
+"""
