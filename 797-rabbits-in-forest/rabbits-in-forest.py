@@ -1,9 +1,20 @@
 class Solution:
     def numRabbits(self, answers: List[int]) -> int:
-        nums = [a + 1 for a in answers]
-        counter = collections.Counter(nums)
+        answers = [a + 1 for a in answers]
+        counter = collections.Counter(answers)
         res = 0
-        for group_size, group_count in counter.items():
-            num = math.ceil(group_count / group_size)
-            res += group_size * num
+        for val, count in counter.items():
+            if count <= val:
+                res += val
+            else:
+                res += math.ceil(count / val) * val
         return res
+"""
+Input: answers = [1,1,2]
+Output: 5
+
+{
+    2: 2
+    3: 3
+}
+"""
