@@ -11,11 +11,11 @@ class Node:
 class Solution:
     def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
         root = p
-        while root.parent:
+        while root and root.parent:
             root = root.parent
         def dfs(node):
-            if not node: return
-            if node == p or node == q:
+            if not node: return node
+            if node == p or q == node:
                 return node
             left = dfs(node.left)
             right = dfs(node.right)
@@ -23,4 +23,8 @@ class Solution:
                 return node
             return left or right
         return dfs(root)
-            
+
+"""
+dfs check pre & post order
+
+"""
