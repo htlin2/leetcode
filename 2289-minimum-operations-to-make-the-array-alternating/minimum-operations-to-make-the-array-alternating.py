@@ -1,16 +1,18 @@
 class Solution:
     def minimumOperations(self, nums: List[int]) -> int:
-        odd = collections.Counter(nums[1::2])
-        even = collections.Counter(nums[::2])
-        # num: count
-        odd_sorted = sorted(odd.items(), key=lambda x: x[1], reverse=True)
-        even_sorted = sorted(even.items(), key=lambda x: x[1], reverse=True)
-        odd_sorted.append((-1, 0))
-        even_sorted.append((-1, 0))
-        N = len(nums)
-        if odd_sorted[0][0] != even_sorted[0][0]:
-            return N - (odd_sorted[0][-1] + even_sorted[0][-1])
+        odd = collections.Counter(nums[::2])
+        even = collections.Counter(nums[1::2])
+        odd_sort = sorted(odd.items(), key=lambda tup: tup[-1], reverse=True)
+        even_sort = sorted(even.items(), key=lambda tup: tup[-1], reverse=True)
+        odd_sort.append((-1, 0))
+        even_sort.append((-1, 0))
+        if odd_sort[0][0] != even_sort[0][0]:
+            # different
+            first = odd_sort[0][-1]
+            second = even_sort[0][-1]
+            return len(nums) - first - second
         else:
-            first = odd_sorted[0][-1] + even_sorted[1][-1]
-            second = odd_sorted[1][-1] + even_sorted[0][-1]
-            return N - max(first, second)
+            # same
+            first = odd_sort[0][-1] + even_sort[1][-1]
+            second = odd_sort[1][-1] + even_sort[0][-1]
+            return len(nums) - max(first, second)
