@@ -1,8 +1,7 @@
 class Solution:
     def numberToWords(self, num: int) -> str:
-        if num == 0: return "Zero"
         hashmap = {
-            0: "",
+            0: 'Zero',
             1: "One",
             2: "Two",
             3: "Three",
@@ -29,35 +28,39 @@ class Solution:
             60: "Sixty",
             70: "Seventy",
             80: "Eighty",
-            90: "Ninety"
-            # 100: "Hundred",
-            # 1000: "Thousand",
-            # 1000000: "Million",
-            # 1000000000: "Billion"
+            90: "Ninety",
         }
         res = []
-        def dfs(num):
-            if num in hashmap:
-                res.append(hashmap[num])
-            elif num < 100:
-                res.append(dfs(num // 10 * 10))
-                res.append(dfs(num % 10))
-            elif num < 1000:
-                res.append(dfs(num // 100))
-                res.append('Hundred')
-                res.append(dfs(num % 100))
-            elif num < 1000000:
-                res.append(dfs(num // 1000))
-                res.append('Thousand')
-                res.append(dfs(num % 1000))
-            elif num < 1000000000:
-                res.append(dfs(num // 1000000))
-                res.append('Million')
-                res.append(dfs(num % 1000000))
-            else:
-                res.append(dfs(num // 1000000000))
-                res.append('Billion')
-                res.append(dfs(num % 1000000000))
-        dfs(num)
-        res = [r for r in res if r]
-        return ' '.join(res)
+        if num in hashmap:
+            return hashmap[num]
+        elif num < 100:
+            tenth = num // 10 * 10
+            digits = num % 10
+            res.append(self.numberToWords(tenth))
+            if digits:
+                res.append(self.numberToWords(digits))
+        elif num < 1000:
+            hundred = num // 100
+            res.append(self.numberToWords(hundred))
+            res.append('Hundred')
+            if num % 100:
+                res.append(self.numberToWords(num % 100))
+        elif num < 1000000:
+            thousand = num // 1000
+            res.append(self.numberToWords(thousand))
+            res.append('Thousand')
+            if num % 1000:
+                res.append(self.numberToWords(num % 1000))
+        elif num < 1000000000:
+            million = num // 1000000
+            res.append(self.numberToWords(million))
+            res.append('Million')
+            if num % 1000000:
+                res.append(self.numberToWords(num % 1000000))
+        else:
+            billion = num // 1000000000
+            res.append(self.numberToWords(billion))
+            res.append('Billion')
+            if num % 1000000000:
+                res.append(self.numberToWords(num % 1000000000))
+        return ' '.join(res).strip()
