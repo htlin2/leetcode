@@ -1,20 +1,13 @@
 class Solution:
     def numRabbits(self, answers: List[int]) -> int:
-        answers = [a + 1 for a in answers]
-        counter = collections.Counter(answers)
+        counter = collections.Counter([a + 1 for a in answers])
         res = 0
-        for val, count in counter.items():
-            if count <= val:
-                res += val
-            else:
-                res += math.ceil(count / val) * val
+        for key, count in counter.items():
+            number = count // key
+            plus_one = 1 if count % key >= 1 else 0
+            number += plus_one
+            res += number * key
         return res
 """
-Input: answers = [1,1,2]
-Output: 5
-
-{
-    2: 2
-    3: 3
-}
+counter
 """
