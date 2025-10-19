@@ -1,37 +1,23 @@
 class Vector2D:
 
     def __init__(self, vec: List[List[int]]):
-        self.vec = vec
-        self.row = 0
-        self.col = -1
+        self.q = collections.deque(self.flatten(vec))
 
-    def advance(self):
-        self.col += 1
-        while self.row < len(self.vec):
-            if self.col >= len(self.vec[self.row]):
-                self.col = 0
-                self.row += 1
-            elif self.vec[self.row][self.col] != None:
-                return self.vec[self.row][self.col]
-            else:
-                self.col += 1
-
+    def flatten(self, arr):
+        res = []
+        for int_or_arr in arr:
+            if isinstance(int_or_arr, list):
+                curr = self.flatten(int_or_arr)
+                res = [*res, *curr]
+            elif isinstance(int_or_arr, int):
+                res.append(int_or_arr)
+        return res
 
     def next(self) -> int:
-        return self.advance()
+        return self.q.popleft()
 
     def hasNext(self) -> bool:
-        col = self.col + 1
-        row = self.row
-        while row < len(self.vec):
-            if col >= len(self.vec[row]):
-                col = 0
-                row += 1
-            elif self.vec[row][col] != None:
-                return True
-            else:
-                col += 1
-        return False
+        return len(self.q) > 0
 
 
 # Your Vector2D object will be instantiated and called as such:
