@@ -1,6 +1,8 @@
 class Solution:
     def shoppingOffers(self, price: List[int], special: List[List[int]], needs: List[int]) -> int:
         N = len(price)
+
+        # Keep only specials that are real discounts
         good_specials = []
         for offer in special:
             bundle_cost = offer[-1]
@@ -14,7 +16,11 @@ class Solution:
         def dfs(needs):
             if needs in memo:
                 return memo[needs]
+
+            # Buy remaining items individually
             best = sum([needs[i] * price[i] for i in range(N)])
+
+            # Try each valid special
             for offer in good_specials:
                 nxt = []
                 bundle_cost = offer[-1]
@@ -29,8 +35,3 @@ class Solution:
             memo[needs] = best
             return best
         return dfs(tuple(needs))
-"""
-backtracking / dp
-
-
-"""
