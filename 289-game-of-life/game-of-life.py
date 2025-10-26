@@ -8,7 +8,7 @@ class Solution:
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, -1), (1, -1), (-1, 1)]
         for r in range(ROW):
             for c in range(COL):
-                one, zero = 0, 0
+                one = 0
                 is_live = copy_grid[r][c] == 1
                 for dr, dc in directions:
                     rr, cc = r + dr, c + dc
@@ -16,8 +16,6 @@ class Solution:
                         continue
                     if copy_grid[rr][cc] == 1:
                         one += 1
-                    else:
-                        zero += 1
                 if is_live and (one < 2 or one > 3):
                     grid[r][c] = 0
                 elif is_live and (one == 2 or one == 3):
