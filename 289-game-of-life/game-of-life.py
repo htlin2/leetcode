@@ -3,20 +3,13 @@ class Solution:
         """
         Do not return anything, modify board in-place instead.
         {
-            a: 0
-            b: 1
-            c: 0
-            d: 1
-        }
-        {
             b,a
-            0,0: a
-            0,1: b
-            1,0: c
-            1,1: d
+            0,0: 0
+            1,0: 1
+            0,1: 2
+            1,1: 3
         }
         """
-        hashmap = {'a': 0, 'b': 1, 'c': 0, 'd': 1}
         directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
         ROWS, COLS = len(grid), len(grid[0])
         for r in range(ROWS):
@@ -28,21 +21,20 @@ class Solution:
                     if rr < 0 or cc < 0 or rr >= ROWS or cc >= COLS:
                         continue
                     key = grid[rr][cc]
-                    if key in hashmap and key in ['c', 'd']:
+                    if key in [1, 3]:
                         counts += 1
-                    elif key not in hashmap:
-                        counts += grid[rr][cc]
                 if is_live and counts < 2:
-                    grid[r][c] = 'c'
+                    grid[r][c] = 1
                 elif is_live and counts in [2, 3]:
-                    grid[r][c] = 'd'
+                    grid[r][c] = 3
                 elif is_live and counts > 3:
-                    grid[r][c] = 'c'
+                    grid[r][c] = 1
                 elif not is_live and counts == 3:
-                    grid[r][c] = 'b'
-                else:
-                    grid[r][c] = 'a'
+                    grid[r][c] = 2
         for r in range(ROWS):
             for c in range(COLS):
-                grid[r][c] = hashmap[grid[r][c]]
+                if grid[r][c] in [0, 1]:
+                    grid[r][c] = 0
+                elif grid[r][c] in [2,3]:
+                    grid[r][c] = 1
         return
