@@ -1,18 +1,28 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        def helper(left, right):
-            if left > right: return float('-inf')
-            mid = (left + right) // 2
-            curr_sum = left_sum = 0
-            for i in range(mid - 1, left - 1, -1):
-                curr_sum += nums[i]
-                left_sum = max(left_sum, curr_sum)
-            curr_sum = right_sum = 0
-            for i in range(mid + 1, right + 1):
-                curr_sum += nums[i]
-                right_sum = max(right_sum, curr_sum)
-            combined = left_sum + right_sum + nums[mid]
-            sub_left = helper(left, mid - 1)
-            sub_right = helper(mid + 1, right)
-            return max(combined, sub_left, sub_right)
-        return helper(0, len(nums) - 1)
+        if not nums: return 0
+        N = len(nums)
+        l = 0
+        curr_sum, max_sum = 0, nums[0]
+        for r in range(N):
+            num = nums[r]
+            curr_sum += num
+            max_sum = max(curr_sum, max_sum)
+            if curr_sum < 0:
+                l = r
+                curr_sum = 0
+        return max_sum
+"""
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+Output: 6
+
+two pointers
+ [-2, 1,-3, 4,-1, 2, 1,-5, 4]
+l  0, 1,-3, 4
+r -2, 1,-3, 4, 3, 2, 1, r
+s  0, 1,-2, 4, 3, 5, 6, 1
+m     1     4     5, 6
+
+if curr_sum < 0, move left pointer
+
+"""
