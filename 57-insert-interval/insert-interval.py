@@ -1,29 +1,42 @@
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        ans = []
-        for i in range(len(intervals)):
-            i_start, i_end = intervals[i]
-            s, e = newInterval
-            if i_start <= s <= i_end or s <= i_start <= e:
-                newInterval = [min(i_start, s), max(i_end, e)]
-            elif e < i_start:
-                ans.append(newInterval)
-                return ans + intervals[i:]
-            else:
-                ans.append(intervals[i])
-        ans.append(newInterval)
-        return ans
-
+        intervals.append(newInterval)
+        intervals.sort(key=lambda x: x[0])
+        stack = []
+        for interval in intervals:
+            if not stack:
+                stack.append(interval)
+                continue
+            stack_l, stack_r = stack.pop()
+            int_l, int_r = interval
+            if stack_l <= int_l <= stack_r:
+                stack_l = min(stack_l, int_l)
+                stack_r = max(stack_r, int_r)
+                stack.append([stack_l, stack_r])
+                continue
+            stack.append([stack_l, stack_r])
+            stack.append([int_l, int_r])
+        return stack
 """
-1. sort + merge
-add new interval to intervals
-sort intervals by start
-stack = [1, 2]
-iterate through intervals:
-    merge with stack if overlap
-return stack
-time: O(n log n)
-space: O(n)
+Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+Output: [[1,5],[6,9]]
+
+[1, 3], [6, 9]
+   2   5
+[1,5], [6, 9 ]
+stack = [1,5]
+intervals = [6,9]
+stack_l, stack_r = [1,3]
+int_l, int_r = [2, 5]
+res_l = min(stack_l, int_l)
+res_r = max(stack_r, int_r)
+T: O(n log n)
+S: O(n)
 
 
+Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+Output: [[1,2],[3,10],[12,16]]
+
+[1,2],[3,5],[6,7],[8,10],[12,16]
+        4          8
 """
