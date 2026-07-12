@@ -1,18 +1,21 @@
 class Solution:
     def isValid(self, s: str) -> bool:
-        h = {'(': ')', '[': ']', '{': '}'}
-        stack = []
-        for char in s:
-            if char in h:
-                stack.append(h[char])
+        stack = [] # 
+        hashmap = {
+            '(': ')',
+            '[': ']',
+            '{': '}',
+        }
+        for p in s:
+            # handle open p
+            if p in hashmap:
+                stack.append(p)
                 continue
-            if not stack or stack[-1] != char: return False
-            stack.pop()
+            # handle close p
+            if not stack:
+                return False
+            elif hashmap[stack[-1]] == p:
+                stack.pop()
+            else:
+                return False
         return len(stack) == 0
-"""
-1) stack
-stack = (
-Time: O(n)
-Space: O(n)
-
-"""
