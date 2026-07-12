@@ -1,14 +1,7 @@
-import collections
 class Solution:
-    def groupAnagrams(self, words: List[str]) -> List[List[str]]:
-        hashmap = collections.defaultdict(list) # sorted_key: list of word
-        for w in words:
-            key = ''.join(sorted(w))
-            hashmap[key].append(w)
-        return hashmap.values()
-
-"""
-hashmap + sort
-Time: O(n * w log w)
-Space: O(n)
-"""
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
+        hashmap = collections.defaultdict(list) # key: []
+        for w in strs:
+            sorted_w = sorted(w)
+            hashmap[''.join(sorted_w)].append(w)
+        return [arr for arr in hashmap.values()]
