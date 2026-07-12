@@ -1,10 +1,10 @@
 class Solution:
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
-        counter = collections.Counter(nums)
-        sorted_tuples = sorted(counter.items(), key=lambda x: x[-1], reverse=True)
+        counter = collections.Counter(nums) # n
+        max_heap = [(-count, key) for key, count in counter.items()] # n
+        heapq.heapify(max_heap) # logn
         res = []
-        for key, value in sorted_tuples:
+        for i in range(k): # k
+            count, key = heapq.heappop(max_heap)
             res.append(key)
-            if len(res) == k:
-                return res
-        return res
+        return res # k * n
