@@ -1,21 +1,22 @@
 class Solution:
     def lengthOfLongestSubstring(self, s: str) -> int:
         N = len(s)
-        res = 0
         left = 0
-        window = set()
+        res = 0
+        visited = set() # char
         for right in range(N):
-            while s[right] in window:
-                window.remove(s[left])
+            # handle duplicate
+            while s[right] in visited and left < right:
+                # remove char in visited
+                visited.remove(s[left])
+                # move left pointer
                 left += 1
-            window.add(s[right])
-            res = max(res, len(window))
+            # handle not duplicate
+            visited.add(s[right])
+            res = max(len(visited), res)
         return res
 """
-sliding window variable
-Input: s = "abcabcbb"
-Output: 3 -> abc
-window = cab
- a b c a b c b b
-     l   r
+two pointers + hashmap
+T: O(n)
+S: O(n)
 """
