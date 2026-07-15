@@ -7,19 +7,16 @@
 class Solution:
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         if not root: return []
-        q = collections.deque([root])
-        res = []
-        while q:
-            curr_level = []
-            for _ in range(len(q)):
-                node = q.popleft()
-                curr_level.append(node.val)
-                if node.left:
-                    q.append(node.left)
-                if node.right:
-                    q.append(node.right)
-            res.append(curr_level)
-        return res
+        hashmap = collections.defaultdict(list)
+        def dfs(node, curr_level):
+            if not node: return
+            hashmap[curr_level].append(node.val)
+            if node.left:
+                dfs(node.left, curr_level + 1)
+            if node.right:
+                dfs(node.right, curr_level + 1)
+        dfs(root, 0)
+        return list(hashmap.values())
 """
 1. dfs
 when go down to each level track the curr_level
