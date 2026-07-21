@@ -1,52 +1,60 @@
 class Node:
-    def __init__(self, val=-1, key=-1):
-        self.val = val
+    def __init__(self, key, value):
         self.key = key
-        self.prev = None
+        self.value = value
         self.next = None
+        self.prev = None
 
 class LRUCache:
+
     def __init__(self, cap: int):
-        head, tail = Node(), Node()
-        head.next, tail.prev = tail, head
+        # hashmap + LL
+        # handle cap
+        # key_node_map = {key: Node}
+        # MRU (head) -> LRU (tail)
+        self.head = Node(-1, -1)
+        self.tail = Node(-1, -1)
+        self.head.next = self.tail
+        self.tail.prev = self.head
         self.cap = cap
-        self.head = head
-        self.tail = tail
-        self.cache = {} # key: Node
+        self.key_node_map = collections.defaultdict(Node)
 
-    def insert(self, key, val):
-        curr_node = Node(key=key, val=val)
-        self.cache[key] = curr_node
-        prev_node, next_node = self.head, self.head.next
-        prev_node.next, next_node.prev = curr_node, curr_node
-        curr_node.next, curr_node.prev = next_node, prev_node
+    def _insert_node(self, key, value):
+        node = Node(key, value)
+        self.key_node_map[key] = node
+        prev_node = self.head.next
+        self.head.next, node.prev = node, self.head
+        prev_node.prev, node.next = node, prev_node
+        return node
 
-    def remove(self, key):
-        curr_node = self.cache[key]
-        del self.cache[key]
-        prev_node, next_node = curr_node.prev, curr_node.next
-        prev_node.next, next_node.prev = next_node, prev_node
-
-    def remove_tail(self):
-        curr_node = self.tail.prev
-        self.remove(curr_node.key)
+    def _remove_node(self, key):
+        curr_node = self.key_node_map[key]
+        next_node, prev_node = curr_node.next, curr_node.prev
+        next_node.prev, prev_node.next = prev_node, next_node
+        del self.key_node_map[key]
+        return curr_node
 
     def get(self, key: int) -> int:
-        if not key in self.cache:
-            return -1
-        val = self.cache[key].val
-        self.remove(key)
-        self.insert(key, val)
-        return self.cache[key].val
+        # return value associated to the key
+        # return -1 if key not exist
+        if key not in self.key_node_map: return -1
+        curr_node = self._remove_node(key)
+        self._insert_node(curr_node.key, curr_node.value)
+        return curr_node.value
+        
 
-    def put(self, key: int, val: int) -> None:
-        if not key in self.cache:
-            self.insert(key, val)
+    def put(self, key: int, value: int) -> None:
+        # upsert value to the key
+        # if count of keys > cap, evict LRU key
+        if key in self.key_node_map:
+            self.get(key)
+            self.key_node_map[key].value = value
         else:
-            self.remove(key)
-            self.insert(key, val)
-        if len(self.cache) > self.cap:
-            self.remove_tail()
+            if self.cap == len(self.key_node_map):
+                # evict LRU
+                LRU = self.tail.prev
+                self._remove_node(LRU.key)
+            self._insert_node(key, value)
 
 
 # Your LRUCache object will be instantiated and called as such:
