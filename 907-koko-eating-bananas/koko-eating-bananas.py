@@ -1,19 +1,15 @@
 class Solution:
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
         left, right = 1, max(piles)
-        while left <= right:
-            mid = (left + right) // 2
-            speed = sum([math.ceil(p / mid) for p in piles])
-            if speed > h:
-                # eating too slow, speed up, increase mid
-                left = mid + 1
-            elif speed < h:
-                # eating too fast, slow down, decrease mid
-                right = mid - 1
+        while left < right:
+            mid = (left + right) // 2 # speed
+            total_time = sum([math.ceil(p / mid) for p in piles])
+            if total_time == h:
+                right = mid
+            elif total_time < h:
+                # eating too fast, slow down, mid-
+                right = mid
             else:
-                # same as h, slow down
-                right = mid - 1
+                # eating too slow, speed up, mid+
+                left = mid + 1
         return left
-"""
-binary search weight left
-"""
