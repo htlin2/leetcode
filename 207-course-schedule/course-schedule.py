@@ -1,21 +1,23 @@
 class Solution:
     def canFinish(self, N: int, prerequisites: List[List[int]]) -> bool:
-        adj = collections.defaultdict(set)
+        adj = collections.defaultdict(list) # src: [dst1, dst2]
         for src, dst in prerequisites:
-            adj[src].add(dst)
-        visited, cycle = set(), set()
-        res = set()
-        def dfs(src):
-            if src in visited: return True
-            if src in cycle: return False
-            cycle.add(src)
-            for nei in adj[src]:
+            adj[src].append(dst)
+        
+        cycle, visited = set(), set()
+        def dfs(i):
+            if i in cycle: return False
+            if i in visited: return True
+            cycle.add(i)
+            for nei in adj[i]:
                 if not dfs(nei):
                     return False
-            visited.add(src)
-            cycle.remove(src)
+            cycle.remove(i)
+            visited.add(i)
             return True
+
         for i in range(N):
             if not dfs(i):
                 return False
+
         return len(visited) == N
